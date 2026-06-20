@@ -1,48 +1,194 @@
-# SEQUIP — Secondary Education Quality Improvement Program (Tanzania)
+# SEQUIP — Secondary Education Quality Improvement Project (Tanzania)
 
-This repository contains the official website content for the SEQUIP project in Tanzania. SEQUIP (Secondary Education Quality Improvement Program) is a national program focused on improving access to, and the quality of, secondary education across Tanzania.
+![SEQUIP](assets/images/sequip-banner.jpg)
 
 ## Overview
 
-SEQUIP aims to strengthen secondary education by investing in school infrastructure, teacher training, curriculum and learning materials, and systems for improved management and accountability. The program supports equitable access to secondary schooling, improved learning outcomes, and strengthened linkages between secondary education and continued training or employment.
+The **Secondary Education Quality Improvement Project (SEQUIP)** is a flagship Government of Tanzania initiative designed to expand access to secondary education, improve learning outcomes, and create safe, inclusive, and responsive learning environments for girls and boys across the country.
 
-## Objectives
+SEQUIP is jointly implemented by the Ministry of Education, Science and Technology (MoEST) and the President’s Office – Regional Administration and Local Government (PO-RALG), with financial support from the World Bank through the International Development Association (IDA).
 
-- Improve access to secondary education for underserved groups.
-- Enhance the quality of teaching and learning in lower and upper secondary schools.
-- Strengthen school management, accountability, and data systems.
-- Support workforce-relevant technical and vocational tracks.
-
-## Key Components
-
-1. School infrastructure and expansion — investments to increase capacity and learning-friendly environments.
-2. Teacher development and pedagogy — in-service training, instructional materials, and classroom support.
-3. Curriculum, assessments, and learning materials — aligning curriculum to learning goals and assessment reforms.
-4. Institutional strengthening — improving management, planning, monitoring, and use of education data.
-5. Targeted interventions — scholarships, school grants, and support for disadvantaged students.
-
-## Implementation & Partners
-
-SEQUIP is typically implemented by the Government of Tanzania through the Ministry of Education (or equivalent ministry/agency responsible for secondary education), with financial and technical support from development partners and funders. Key partners often include international donors, NGOs, and local education stakeholders.
-
-## Expected/Reported Results
-
-Typical program results include increased enrollment and completion rates at secondary level, improved learning outcomes on nationally representative assessments, improved teacher practices, and upgraded school infrastructure. Specific program indicators, targets, and measured results should be cited from authoritative project documents.
-
-## How to Use This Repository
-
-- Website source files and content for the SEQUIP official site.
-- Documentation and assets used for public communications about the program.
-- Contact and partnership details for stakeholders and implementers.
-
-## Sources & Further Reading
-
-This README will be updated with verified, authoritative citations (World Bank project page(s), Government of Tanzania Ministry of Education documents, project appraisal and implementation reports, and other partner resources). If you'd like, I can fetch and add those links and citations now.
-
-## Contact
-
-For updates to website content or corrections, please contact the Project Coordinator (contact details to be added).
+The project was approved in 2020 with a financing envelope of **US$500 million**, making it one of the largest education investments in Tanzania's history.
 
 ---
 
-Note: This is a draft README with provisional content. I will verify specific dates, funding amounts, indicator targets, and implementation details from authoritative sources and update the Sources section with links and citations on request.
+## Project Development Objective
+
+The official objective of SEQUIP is:
+
+> **To increase access to secondary education, provide responsive learning environments for girls, and improve completion of quality secondary education for girls and boys.**
+
+---
+
+## Key Focus Areas
+
+### 1. Empowering Girls Through Education
+
+SEQUIP prioritizes girls' participation and completion of secondary education through:
+
+* Safe and inclusive school environments
+* Life-skills education
+* Prevention of school dropout
+* Support for adolescent girls and vulnerable learners
+* Alternative education pathways for out-of-school youth
+
+### 2. Digitally Enabled Teaching and Learning
+
+The project strengthens teaching and learning through:
+
+* Digital learning technologies
+* Improved science and mathematics instruction
+* Teacher professional development
+* Enhanced digital literacy
+* Improved learning assessment systems
+
+### 3. Expanding Access to Secondary Education
+
+SEQUIP supports:
+
+* Construction of new secondary schools
+* Expansion of existing school facilities
+* Reduction of travel distance to schools
+* Improvement of laboratories, classrooms, sanitation facilities, and teacher housing
+* Increased enrolment capacity, especially in underserved and rural areas
+
+### 4. Monitoring, Evaluation, and Institutional Strengthening
+
+The project enhances:
+
+* Education management information systems
+* Planning and decision-making processes
+* School governance and accountability
+* Monitoring and evaluation mechanisms
+* Evidence-based education policy development
+
+---
+
+## Implementation Structure
+
+### Lead Institutions
+
+* Ministry of Education, Science and Technology (MoEST)
+* President's Office – Regional Administration and Local Government (PO-RALG)
+
+### Development Partner
+
+* World Bank (International Development Association – IDA)
+
+### Coverage
+
+SEQUIP is implemented nationwide through Local Government Authorities (LGAs), benefiting public secondary schools across mainland Tanzania.
+
+---
+
+## Achievements and Impact
+
+Since implementation began, SEQUIP has contributed to:
+
+* Expansion of secondary school infrastructure nationwide
+* Improved access to education for girls and vulnerable learners
+* Increased transition and completion rates in secondary education
+* Strengthened teacher capacity and classroom practices
+* Introduction of digital learning initiatives
+* Enhanced school safety and gender-responsive learning environments
+
+According to recent World Bank reporting:
+
+* Approximately **6 million students** have benefited from learning enhancement interventions.
+* Completion of lower secondary education has increased significantly.
+* Gender parity in upper secondary enrolment has improved substantially.
+* Safe-school interventions have been implemented across public secondary schools.
+
+---
+
+## Repository Purpose
+
+This repository contains the source code, content, and digital assets for the official SEQUIP website.
+
+### Contents
+
+* Website source files
+* Project information pages
+* News and announcements
+* Publications and reports
+* Media assets and branding resources
+* Documentation and technical references
+
+---
+
+## Technology Stack
+
+Depending on deployment configuration, this website may use:
+
+* HTML5
+* CSS3
+* JavaScript
+* Bootstrap
+* PHP
+* MySQL
+
+---
+
+## Contributing
+
+Contributions are welcome from authorized project teams and technical partners.
+
+### Development Workflow
+
+```bash
+git clone https://github.com/sequipmoest/sequip_web.git
+cd sequip_web
+```
+
+Create a feature branch:
+
+```bash
+git checkout -b feature/new-feature
+```
+
+Commit changes:
+
+```bash
+git commit -m "Add new feature"
+```
+
+Push changes:
+
+```bash
+git push origin feature/new-feature
+```
+
+---
+
+## Documentation
+
+Project documents and publications are available through:
+
+* Government of Tanzania education sector platforms
+* SEQUIP project communications channels
+* World Bank project documentation
+
+---
+
+## License
+
+Unless otherwise specified, project content and source code are subject to the licensing terms defined by the implementing institutions.
+
+---
+
+## Acknowledgements
+
+SEQUIP is implemented by the Government of Tanzania through MoEST and PO-RALG with support from the World Bank and education sector stakeholders committed to improving equitable access to quality secondary education.
+
+---
+
+## References
+
+1. World Bank. *Tanzania Secondary Education Quality Improvement Project (SEQUIP), Project ID P170480.*
+2. World Bank. *New Financing to Make Secondary Education Safer, Better, and More Accessible for Tanzanian Girls and Boys.*
+3. Ministry of Education, Science and Technology (MoEST).
+4. President's Office – Regional Administration and Local Government (PO-RALG).
+
+---
+
+© Government of Tanzania — Secondary Education Quality Improvement Project (SEQUIP)
