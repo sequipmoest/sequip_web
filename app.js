@@ -110,7 +110,7 @@ function renderNationalDashboard() {
   const n = SEQUIP_DATA.national;
   
   // Set National metrics
-  document.getElementById('nationalBudget').innerText = `US$${(n.schools * 0.64 + 5).toFixed(0)}M`; // Derived illustration
+  document.getElementById('nationalBudget').innerText = 'US$535M';
   document.getElementById('nationalTeachers').innerText = n.teachers_trained.toLocaleString();
   document.getElementById('nationalTextbooks').innerText = n.textbooks_distributed.toLocaleString();
   document.getElementById('nationalEnrolment').innerText = SEQUIP_DATA.enrolment['2026'].toLocaleString();
