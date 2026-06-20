@@ -215,13 +215,43 @@
       </div>
     </div>
     
-    <!-- View 1: Executive Dashboard (Hero Metric Grid) -->
+      <!-- Achievements: Interactive Pie Charts -->
+      <div class="card global-summary-card" id="achievementsCard">
+        <div class="card-header-bar">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 2"></path></svg>
+            Achievements — Visual Breakdown
+          </h2>
+          <div class="kpi-subtext" style="font-weight:600; color:var(--accent-blue);">Interactive charts — click segments for details</div>
+        </div>
+
+        <div style="display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start;">
+          <div style="flex:1 1 280px; min-width:260px;">
+            <canvas id="chartPBCs" aria-label="PBC Achievement Chart" role="img"></canvas>
+            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:8px;">PBCs: Met vs In-progress vs Not Met</div>
+          </div>
+
+          <div style="flex:1 1 280px; min-width:260px;">
+            <canvas id="chartGender" aria-label="Beneficiary Gender Chart" role="img"></canvas>
+            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:8px;">Beneficiaries by gender (approx.)</div>
+          </div>
+
+          <div style="flex:1 1 280px; min-width:260px;">
+            <canvas id="chartAllocation" aria-label="Resource Allocation Chart" role="img"></canvas>
+            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:8px;">Illustrative resource allocation</div>
+          </div>
+        </div>
+
+        <div id="chartDetails" style="margin-top:12px; font-size:0.95rem; color:var(--text-secondary);">Click a chart segment to see details here.</div>
+      </div>
+
+      <!-- View 1: Executive Dashboard (Hero Metric Grid) -->
     <div id="heroView" class="hero-view-container">
       
       <!-- Top Massive KPI Grid -->
       <section class="hero-metrics-grid">
         <!-- Card 1: Budget Spent -->
-        <div class="card hero-kpi-card kpi-budget">
+        <!-- <div class="card hero-kpi-card kpi-budget">
           <div class="kpi-info">
             <h3>Financial Scope</h3>
             <div id="nationalBudget" class="kpi-value">M</div>
@@ -230,7 +260,7 @@
           <div class="kpi-icon-wrapper">
             <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
           </div>
-        </div>
+        </div> -->
         
         <!-- Card 2: Teacher capacity building -->
         <div class="card hero-kpi-card kpi-teachers">
@@ -657,5 +687,94 @@
   <script src="data.js"></script>
   <!-- Load App scripts -->
   <script src="app.js"></script>
+  <!-- Chart.js for interactive pie/doughnut charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    (function(){
+      const details = document.getElementById('chartDetails');
+
+      // PBC Achievements
+      const ctxPBC = document.getElementById('chartPBCs').getContext('2d');
+      const chartPBCs = new Chart(ctxPBC, {
+        type: 'doughnut',
+        data: {
+          labels: ['Met', 'In Progress', 'Not Met'],
+          datasets: [{
+            data: [11, 1, 0],
+            backgroundColor: ['#00e676', '#ffc107', '#ff5252'],
+            hoverOffset: 8,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {legend: {position: 'bottom'}},
+          onClick: (evt, activeEls) => {
+            const idx = activeEls[0] && activeEls[0].index;
+            if (idx !== undefined) {
+              const label = chartPBCs.data.labels[idx];
+              const val = chartPBCs.data.datasets[0].data[idx];
+              details.textContent = `${label}: ${val} PBC(s)`;
+            }
+          }
+        }
+      });
+
+      // Gender distribution
+      const ctxGen = document.getElementById('chartGender').getContext('2d');
+      const chartGender = new Chart(ctxGen, {
+        type: 'doughnut',
+        data: {
+          labels: ['Female', 'Male'],
+          datasets: [{
+            data: [52, 48],
+            backgroundColor: ['#e040fb', '#2196f3'],
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {legend: {position: 'bottom'}},
+          onClick: (evt, activeEls) => {
+            const idx = activeEls[0] && activeEls[0].index;
+            if (idx !== undefined) {
+              const label = chartGender.data.labels[idx];
+              const val = chartGender.data.datasets[0].data[idx];
+              details.textContent = `${label}: ${val}% of beneficiaries (approx.)`;
+            }
+          }
+        }
+      });
+
+      // Illustrative resource allocation
+      const ctxAlloc = document.getElementById('chartAllocation').getContext('2d');
+      const chartAllocation = new Chart(ctxAlloc, {
+        type: 'doughnut',
+        data: {
+          labels: ['Infrastructure', 'Teacher Training', 'Materials & Textbooks', 'Administration & Other'],
+          datasets: [{
+            data: [50, 25, 15, 10],
+            backgroundColor: ['#ffd54f', '#66bb6a', '#29b6f6', '#b39ddb'],
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {legend: {position: 'bottom'}},
+          onClick: (evt, activeEls) => {
+            const idx = activeEls[0] && activeEls[0].index;
+            if (idx !== undefined) {
+              const label = chartAllocation.data.labels[idx];
+              const val = chartAllocation.data.datasets[0].data[idx];
+              details.textContent = `${label}: ${val}% (illustrative)`;
+            }
+          }
+        }
+      });
+
+      // Add a little entrance animation to the details
+      details.addEventListener('transitionend', ()=>{});
+    })();
+  </script>
 </body>
 </html>
