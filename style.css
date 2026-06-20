@@ -431,6 +431,110 @@ body {
   border-radius: 3px;
 }
 
+.pbc-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.75rem;
+}
+
+.pbc-card-item {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-card);
+  border-radius: 10px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 135px;
+  transition: var(--transition);
+}
+
+.pbc-card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.pbc-card-item.status-complete {
+  border-color: rgba(0, 230, 118, 0.2);
+  background: linear-gradient(180deg, rgba(0, 230, 118, 0.04) 0%, transparent 100%);
+}
+
+.pbc-card-item.status-complete:hover {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 10px rgba(0, 230, 118, 0.15);
+}
+
+.pbc-card-item.status-progress {
+  border-color: rgba(255, 193, 7, 0.2);
+  background: linear-gradient(180deg, rgba(255, 193, 7, 0.04) 0%, transparent 100%);
+}
+
+.pbc-card-item.status-progress:hover {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.15);
+}
+
+.pbc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.pbc-card-id {
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.status-complete .pbc-card-id {
+  color: var(--accent-green);
+}
+
+.status-progress .pbc-card-id {
+  color: var(--accent-gold);
+}
+
+.pbc-card-emoji {
+  font-size: 1.1rem;
+}
+
+.pbc-card-name {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pbc-card-status-val {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.status-complete .pbc-card-status-val {
+  color: var(--accent-green);
+}
+
+.status-progress .pbc-card-status-val {
+  color: var(--accent-gold);
+}
+
+.pbc-card-status-lbl {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
