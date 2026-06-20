@@ -41,7 +41,7 @@ This README will be updated with verified, authoritative citations (World Bank p
 
 ## Contact
 
-For updates to website content or corrections, please contact the program communications lead (contact details to be added).
+For updates to website content or corrections, please contact the Project Coordinator (contact details to be added).
 
 ---
 
