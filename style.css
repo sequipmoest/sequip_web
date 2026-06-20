@@ -322,6 +322,115 @@ body {
   margin-bottom: 2rem;
 }
 
+.pbc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.pbc-component-card {
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: var(--transition);
+}
+
+.pbc-component-card:hover {
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pbc-component-header {
+  border-bottom: 1px solid var(--border-card);
+  padding-bottom: 0.5rem;
+}
+
+.pbc-component-num {
+  font-size: 0.7rem;
+  background: var(--accent-blue);
+  color: #000;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.pbc-component-header h3 {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pbc-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pbc-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pbc-item-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.pbc-status-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.pbc-badge {
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pbc-badge.pass {
+  background: rgba(0, 230, 118, 0.15);
+  color: var(--accent-green);
+  border: 1px solid rgba(0, 230, 118, 0.2);
+}
+
+.pbc-badge.progress-badge {
+  background: rgba(255, 193, 7, 0.15);
+  color: var(--accent-gold);
+  border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.pbc-progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.pbc-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-green));
+  border-radius: 3px;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
