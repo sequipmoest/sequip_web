@@ -318,6 +318,10 @@ body {
   grid-column: span 12;
 }
 
+.global-summary-card {
+  margin-bottom: 2rem;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

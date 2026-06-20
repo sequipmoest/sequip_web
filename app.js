@@ -34,7 +34,7 @@ let currentLayout = 'hero'; // 'hero' or 'map'
 let activeRegion = 'Dodoma';
 let compareRegion = 'National Average';
 let isComparing = false;
-let currentTheme = 'dark';
+let currentTheme = 'light';
 
 // DOM Elements
 document.addEventListener('DOMContentLoaded', () => {
