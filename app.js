@@ -135,12 +135,12 @@ function initLayoutSwitcher() {
     homeView.style.display = 'none';
     aboutView.style.display = 'none';
     
-    // Trigger map load adjustments and invalidate size for Leaflet
+    // Trigger map load adjustments and fit bounds to all 26 Tanzania regions
     renderRegionDetails(activeRegion);
-    if (leafMap) {
+    if (leafMap && geoJsonLayer) {
       setTimeout(() => {
         leafMap.invalidateSize();
-        zoomToRegion(activeRegion);
+        leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
       }, 50);
     }
   });
