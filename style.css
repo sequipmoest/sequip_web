@@ -1336,3 +1336,11 @@ body {
 .leaflet-custom-tooltip::before {
   border-top-color: var(--border-card) !important;
 }
+
+/* About View Page Container Styling */
+.about-view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}

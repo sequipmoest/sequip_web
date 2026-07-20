@@ -30,7 +30,7 @@ const REGION_MAPPING = {
 };
 
 // State Variables
-let currentLayout = 'hero'; // 'hero' or 'map'
+let currentLayout = 'home'; // 'home', 'map', or 'about'
 let activeRegion = 'Dodoma';
 let compareRegion = 'National Average';
 let isComparing = false;
@@ -105,17 +105,21 @@ function initTheme() {
 
 // Layout Switcher
 function initLayoutSwitcher() {
-  const heroBtn = document.getElementById('btnHeroLayout');
+  const homeBtn = document.getElementById('btnHomeLayout');
   const mapBtn = document.getElementById('btnMapLayout');
-  const heroView = document.getElementById('heroView');
+  const aboutBtn = document.getElementById('btnAboutLayout');
+  const homeView = document.getElementById('heroView');
   const mapView = document.getElementById('mapView');
+  const aboutView = document.getElementById('aboutView');
 
-  heroBtn.addEventListener('click', () => {
-    currentLayout = 'hero';
-    heroBtn.classList.add('active');
+  homeBtn.addEventListener('click', () => {
+    currentLayout = 'home';
+    homeBtn.classList.add('active');
     mapBtn.classList.remove('active');
-    heroView.style.display = 'flex';
+    aboutBtn.classList.remove('active');
+    homeView.style.display = 'flex';
     mapView.style.display = 'none';
+    aboutView.style.display = 'none';
     
     // Animate numbers and charts
     renderAllCharts();
@@ -125,9 +129,11 @@ function initLayoutSwitcher() {
   mapBtn.addEventListener('click', () => {
     currentLayout = 'map';
     mapBtn.classList.add('active');
-    heroBtn.classList.remove('active');
+    homeBtn.classList.remove('active');
+    aboutBtn.classList.remove('active');
     mapView.style.display = 'grid';
-    heroView.style.display = 'none';
+    homeView.style.display = 'none';
+    aboutView.style.display = 'none';
     
     // Trigger map load adjustments and invalidate size for Leaflet
     renderRegionDetails(activeRegion);
@@ -137,6 +143,16 @@ function initLayoutSwitcher() {
         zoomToRegion(activeRegion);
       }, 50);
     }
+  });
+
+  aboutBtn.addEventListener('click', () => {
+    currentLayout = 'about';
+    aboutBtn.classList.add('active');
+    homeBtn.classList.remove('active');
+    mapBtn.classList.remove('active');
+    aboutView.style.display = 'flex';
+    homeView.style.display = 'none';
+    mapView.style.display = 'none';
   });
 }
 
