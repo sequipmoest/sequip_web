@@ -244,7 +244,7 @@ function initMapInteractions() {
     });
 }
 
-function selectRegion(regionName, zoom = true) {
+function selectRegion(regionName, zoom = false) {
   activeRegion = regionName;
   
   // Highlight the matching region boundary on the map
@@ -331,7 +331,7 @@ function initSearch() {
       div.addEventListener('click', () => {
         input.value = match;
         suggestions.style.display = 'none';
-        selectRegion(match);
+        selectRegion(match, false);
       });
       suggestions.appendChild(div);
     });
@@ -942,7 +942,7 @@ function renderMapLayers() {
           }
         },
         click: function(e) {
-          selectRegion(regionName, true);
+          selectRegion(regionName, false);
         }
       });
     }
@@ -989,7 +989,7 @@ function renderGirlsSchoolsPoints() {
       });
       
       marker.on('click', () => {
-        selectRegion(regionName, true);
+        selectRegion(regionName, false);
       });
       
       girlsSchoolsLayerGroup.addLayer(marker);
