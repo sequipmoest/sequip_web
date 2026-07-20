@@ -41,8 +41,9 @@ let leafMap = null;
 let tileLayerInstance = null;
 let geoJsonLayer = null;
 let girlsSchoolsLayerGroup = null;
-let districtsGeoJSON = null;
+let regionsGeoJSON = null;
 let activeMapLayer = 'choropleth'; // 'choropleth' or 'points'
+let regionalClassroomsAndDorms = {};
 
 // DOM Elements
 document.addEventListener('DOMContentLoaded', () => {
@@ -170,29 +171,30 @@ function renderNationalDashboard() {
 function initMapInteractions() {
   if (leafMap) return;
 
-  // Initialize Leaflet Map centered on Tanzania
+  // Initialize Leaflet Map centered on Tanzania (increased zoom control offset)
   leafMap = L.map('gisMap', {
     zoomControl: true,
-    scrollWheelZoom: false
+    scrollWheelZoom: false,
+    attributionControl: false
   }).setView([-6.369, 34.888], 6);
 
-  // Set up tile layer based on current theme
+  // Set up tile layer (removes tile layers for pure vector map)
   updateMapTiles();
 
   // Create layer group for Girls' schools markers
   girlsSchoolsLayerGroup = L.layerGroup();
 
-  // Fetch the simplified geojson
-  fetch('maps/districts.geojson')
+  // Fetch the simplified regional geojson
+  fetch('maps/regions.geojson')
     .then(response => {
       if (!response.ok) throw new Error("Failed to load geojson");
       return response.json();
     })
     .then(geojson => {
-      districtsGeoJSON = geojson;
+      regionsGeoJSON = geojson;
       
-      // MergeCSV district metrics
-      mergeDistrictData(districtsGeoJSON);
+      // Aggregate classrooms and dormitories by region
+      aggregateRegionalClassroomsAndDorms();
 
       // Render default Choropleth layer
       renderMapLayers();
@@ -211,16 +213,19 @@ function initMapInteractions() {
 function selectRegion(regionName, zoom = true) {
   activeRegion = regionName;
   
-  // Highlight the matching district boundaries on the map
+  // Highlight the matching region boundary on the map
   if (geoJsonLayer) {
     geoJsonLayer.eachLayer(layer => {
       const isSelectedRegion = layer.feature.properties.region.toUpperCase() === regionName.toUpperCase();
       if (isSelectedRegion) {
         layer.setStyle({
-          weight: 2.5,
+          weight: 3,
           color: 'var(--accent-gold)',
           opacity: 1
         });
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+          layer.bringToFront();
+        }
       } else {
         geoJsonLayer.resetStyle(layer);
       }
@@ -809,19 +814,9 @@ function mergeDistrictData(geojson) {
 function updateMapTiles() {
   if (tileLayerInstance) {
     leafMap.removeLayer(tileLayerInstance);
+    tileLayerInstance = null;
   }
-  
-  const isDark = currentTheme === 'dark';
-  const tileUrl = isDark 
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-    
-  const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
-  
-  tileLayerInstance = L.tileLayer(tileUrl, {
-    maxZoom: 18,
-    attribution: attribution
-  }).addTo(leafMap);
+  // Standalone vector map (no background tiles served)
 }
 
 function getChoroplethColor(count) {
@@ -833,9 +828,9 @@ function getChoroplethColor(count) {
   let val3 = style.getPropertyValue('--choropleth-level-3').trim() || 'rgba(0, 230, 118, 0.65)';
   let val4 = style.getPropertyValue('--choropleth-level-4').trim() || 'rgba(0, 230, 118, 0.95)';
   
-  if (count <= 2) return val1;
-  if (count <= 4) return val2;
-  if (count <= 6) return val3;
+  if (count <= 20) return val1;
+  if (count <= 30) return val2;
+  if (count <= 40) return val3;
   return val4;
 }
 
@@ -845,38 +840,39 @@ function renderMapLayers() {
   }
   
   const isDark = currentTheme === 'dark';
-  const strokeColor = isDark ? '#0f172a' : '#f1f5f9';
+  const strokeColor = isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(15, 23, 42, 0.2)';
   
-  geoJsonLayer = L.geoJSON(districtsGeoJSON, {
+  geoJsonLayer = L.geoJSON(regionsGeoJSON, {
     style: function(feature) {
-      const metrics = feature.properties.metrics;
-      const count = metrics.new_schools;
+      const regionName = feature.properties.region;
+      const regData = SEQUIP_DATA.regional[regionName] || { schools: 0 };
+      const count = regData.schools;
       
-      const isSelectedRegion = feature.properties.region.toUpperCase() === activeRegion.toUpperCase();
+      const isSelectedRegion = regionName.toUpperCase() === activeRegion.toUpperCase();
       
       return {
-        fillColor: activeMapLayer === 'choropleth' ? getChoroplethColor(count) : 'rgba(0, 0, 0, 0.02)',
-        weight: isSelectedRegion ? 2.5 : 1,
-        opacity: 0.6,
+        fillColor: activeMapLayer === 'choropleth' ? getChoroplethColor(count) : 'rgba(148, 163, 184, 0.04)',
+        weight: isSelectedRegion ? 3 : 1.5,
+        opacity: 0.8,
         color: isSelectedRegion ? 'var(--accent-gold)' : strokeColor,
-        fillOpacity: activeMapLayer === 'choropleth' ? 0.85 : 0.1
+        fillOpacity: activeMapLayer === 'choropleth' ? 0.85 : 0.2
       };
     },
     onEachFeature: function(feature, layer) {
       const properties = feature.properties;
-      const metrics = properties.metrics;
+      const regionName = properties.region;
+      const regData = SEQUIP_DATA.regional[regionName] || { schools: 0, teachers_trained: 0, textbooks_distributed: 0, girls_science_schools: 0 };
+      const infra = regionalClassroomsAndDorms[regionName] || { classrooms: 0, dormitories: 0 };
       
       // Bind hover events
       layer.on({
         mouseover: function(e) {
           const l = e.target;
-          const isSelected = properties.region.toUpperCase() === activeRegion.toUpperCase();
-          
           l.setStyle({
             weight: 3,
             color: '#fff',
             opacity: 1,
-            fillOpacity: activeMapLayer === 'choropleth' ? 0.95 : 0.25
+            fillOpacity: activeMapLayer === 'choropleth' ? 0.95 : 0.35
           });
           
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -886,12 +882,13 @@ function renderMapLayers() {
           // Update and show floating tooltip
           const tooltip = document.getElementById('mapTooltip');
           tooltip.innerHTML = `
-            <h4>${properties.district}</h4>
-            <div class="tooltip-row"><span class="tooltip-label">Region:</span><span class="tooltip-val">${properties.region}</span></div>
-            <div class="tooltip-row"><span class="tooltip-label">New Schools:</span><span class="tooltip-val">${metrics.new_schools}</span></div>
-            <div class="tooltip-row"><span class="tooltip-label">Classrooms:</span><span class="tooltip-val">${metrics.classrooms}</span></div>
-            <div class="tooltip-row"><span class="tooltip-label">Dormitories:</span><span class="tooltip-val">${metrics.dormitories}</span></div>
-            ${metrics.girls_schools > 0 ? `<div style="margin-top: 6px; color: var(--accent-green); font-weight: 700;">★ Special Girls' School Built</div>` : ''}
+            <h4>${regionName} Region</h4>
+            <div class="tooltip-row"><span class="tooltip-label">New Schools:</span><span class="tooltip-val">${regData.schools}</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Classrooms:</span><span class="tooltip-val">${infra.classrooms.toLocaleString()}</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Dormitories:</span><span class="tooltip-val">${infra.dormitories.toLocaleString()}</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Teachers Trained:</span><span class="tooltip-val">${regData.teachers_trained.toLocaleString()}</span></div>
+            <div class="tooltip-row"><span class="tooltip-label">Textbooks:</span><span class="tooltip-val">${regData.textbooks_distributed.toLocaleString()}</span></div>
+            ${regData.girls_science_schools > 0 ? `<div style="margin-top: 6px; color: var(--accent-green); font-weight: 700;">★ ${regData.girls_science_schools} Girls' School(s) Built</div>` : ''}
           `;
           tooltip.style.display = 'block';
         },
@@ -907,10 +904,10 @@ function renderMapLayers() {
           geoJsonLayer.resetStyle(e.target);
           
           // Restore selected region styles
-          const isSelected = properties.region.toUpperCase() === activeRegion.toUpperCase();
+          const isSelected = regionName.toUpperCase() === activeRegion.toUpperCase();
           if (isSelected) {
             e.target.setStyle({
-              weight: 2.5,
+              weight: 3,
               color: 'var(--accent-gold)',
               opacity: 1
             });
@@ -920,8 +917,7 @@ function renderMapLayers() {
           tooltip.style.display = 'none';
         },
         click: function(e) {
-          // Select region and zoom
-          selectRegion(properties.region, true);
+          selectRegion(regionName, true);
         }
       });
     }
@@ -941,9 +937,10 @@ function renderGirlsSchoolsPoints() {
   
   geoJsonLayer.eachLayer(layer => {
     const properties = layer.feature.properties;
-    const metrics = properties.metrics;
+    const regionName = properties.region;
+    const regData = SEQUIP_DATA.regional[regionName] || { girls_science_schools: 0 };
     
-    if (metrics.girls_schools > 0) {
+    if (regData.girls_science_schools > 0) {
       const center = layer.getBounds().getCenter();
       
       const customIcon = L.divIcon({
@@ -959,16 +956,15 @@ function renderGirlsSchoolsPoints() {
       const marker = L.marker(center, { icon: customIcon });
       
       marker.bindTooltip(`
-        <div style="font-weight: 700; color: var(--accent-green); font-family: var(--font-title);">${properties.district} Girls' School</div>
-        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px;">Region: ${properties.region}</div>
-        <div style="font-size: 0.7rem; color: var(--text-secondary);">Count: ${metrics.girls_schools} built</div>
+        <div style="font-weight: 700; color: var(--accent-green); font-family: var(--font-title);">${regionName} Girls' Schools</div>
+        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px;">Count: ${regData.girls_science_schools} built</div>
       `, {
         direction: 'top',
         offset: [0, -10]
       });
       
       marker.on('click', () => {
-        selectRegion(properties.region, true);
+        selectRegion(regionName, true);
       });
       
       girlsSchoolsLayerGroup.addLayer(marker);
@@ -1030,4 +1026,35 @@ function zoomToRegion(regionName) {
   if (found) {
     leafMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 8 });
   }
+}
+
+
+function normalizeRegionName(name) {
+  if (!name) return "";
+  let normalized = name.trim();
+  normalized = normalized.toLowerCase().split(' ').map(word => {
+    if (word === 'es') return 'es';
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+  return normalized;
+}
+
+function aggregateRegionalClassroomsAndDorms() {
+  regionalClassroomsAndDorms = {};
+  SEQUIP_ME_DATA.District_Data.forEach(row => {
+    const region = row[0];
+    const dorms = parseInt(row[4]) || 0;
+    const classrooms = parseInt(row[5]) || 0;
+    
+    const key = normalizeRegionName(region);
+    
+    if (!regionalClassroomsAndDorms[key]) {
+      regionalClassroomsAndDorms[key] = {
+        classrooms: 0,
+        dormitories: 0
+      };
+    }
+    regionalClassroomsAndDorms[key].classrooms += classrooms;
+    regionalClassroomsAndDorms[key].dormitories += dorms;
+  });
 }
