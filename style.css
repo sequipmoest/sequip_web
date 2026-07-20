@@ -917,8 +917,9 @@ body {
 }
 
 .regional-metric-lbl {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
   margin-top: 4px;
 }
 
@@ -1319,10 +1320,10 @@ body {
 .metric-display-cb {
   appearance: none;
   -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--border-card);
-  border-radius: 3px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-card);
+  border-radius: 4px;
   background: var(--bg-secondary);
   cursor: pointer;
   display: inline-flex;
@@ -1341,7 +1342,7 @@ body {
 .metric-display-cb:checked::after {
   content: '✓';
   color: #fff;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
 }
 
