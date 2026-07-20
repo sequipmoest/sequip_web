@@ -1309,6 +1309,42 @@ body {
   font-weight: 600;
 }
 
+.map-metric-select optgroup {
+  background-color: var(--bg-secondary);
+  color: var(--accent-green);
+  font-weight: 700;
+  font-family: var(--font-body);
+}
+
+.metric-display-cb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border-card);
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.metric-display-cb:checked {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+}
+
+.metric-display-cb:checked::after {
+  content: '✓';
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+}
+
 /* Custom Centroid Pulse Marker style */
 .girls-school-marker {
   position: relative;

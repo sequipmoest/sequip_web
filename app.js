@@ -47,6 +47,64 @@ let activeMapMetric = 'schools'; // 'schools', 'girls_schools', 'classrooms', 'd
 let currentMetricThresholds = [20, 30, 40, 50];
 let regionalClassroomsAndDorms = {};
 
+const metricTitles = {
+  'schools': "New Schools Built",
+  'ward_schools': "Ward Schools",
+  'girls_science_schools': "Girls' Science Schools",
+  'boys_schools': "Boys' Schools",
+  'vocational_schools': "Vocational Schools",
+  'classrooms_built': "Classrooms Built",
+  'classrooms_upgraded': "Classrooms Upgraded",
+  'science_labs': "Science Labs",
+  'teachers_houses': "Teachers' Houses",
+  'dormitories': "Dormitories Built",
+  'pit_latrines_built': "Pit Latrines Built",
+  'pit_latrines_completed': "Pit Latrines Completed",
+  'teachers_trained': "STEM Teachers Trained",
+  'textbooks_distributed': "Textbooks Distributed",
+  'safe_schools_reached': "Safe Schools Reached",
+  'safe_schools_teachers_trained': "Safe School Teachers Trained",
+  'aep_girls_registered': "AEP Girls Registered",
+  'aep_returned_formal': "AEP Girls Returned to Formal Ed",
+  'aep_passed_form_four': "AEP Girls Passed Form 4",
+  'ict_computers': "ICT Computers",
+  'ict_laptops': "ICT Laptops",
+  'ict_projectors': "ICT Projectors",
+  'ict_ups': "ICT UPS Units",
+  'ict_schools_reached': "ICT Schools Reached",
+  'ict_teachers_trained': "ICT Teachers Trained",
+  'ict_smartboard_schools': "ICT Smartboard Schools"
+};
+
+const metricColors = {
+  'schools': 'var(--accent-gold)',
+  'ward_schools': 'var(--accent-gold)',
+  'girls_science_schools': 'var(--accent-green)',
+  'boys_schools': 'var(--accent-blue)',
+  'vocational_schools': 'var(--accent-orange)',
+  'classrooms_built': 'var(--accent-blue)',
+  'classrooms_upgraded': 'var(--accent-blue)',
+  'science_labs': 'var(--accent-orange)',
+  'teachers_houses': 'var(--accent-gold)',
+  'dormitories': 'var(--accent-orange)',
+  'pit_latrines_built': 'var(--text-secondary)',
+  'pit_latrines_completed': 'var(--accent-green)',
+  'teachers_trained': 'var(--accent-green)',
+  'textbooks_distributed': 'var(--accent-blue)',
+  'safe_schools_reached': '#ff5252',
+  'safe_schools_teachers_trained': '#ff5252',
+  'aep_girls_registered': '#e040fb',
+  'aep_returned_formal': '#e040fb',
+  'aep_passed_form_four': '#e040fb',
+  'ict_computers': '#00e5ff',
+  'ict_laptops': '#00e5ff',
+  'ict_projectors': '#00e5ff',
+  'ict_ups': '#00e5ff',
+  'ict_schools_reached': '#00e5ff',
+  'ict_teachers_trained': '#00e5ff',
+  'ict_smartboard_schools': '#00e5ff'
+};
+
 // DOM Elements
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
@@ -55,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSearch();
   initCompare();
   initCardZoom();
+  initMetricsCustomizer();
   
   // Initial renders
   renderNationalDashboard();
@@ -386,21 +445,8 @@ function renderRegionDetails(regionName) {
   const r = SEQUIP_DATA.regional[regionName];
   if (!r) return;
 
-  const key = normalizeRegionName(regionName);
-  const agg = regionalClassroomsAndDorms[key] || { newSchools: 0, girlsSchools: 0, classrooms: 0, dormitories: 0 };
-
   document.getElementById('selectedRegionName').innerText = regionName;
-  document.getElementById('regSchools').innerText = agg.newSchools;
-  document.getElementById('regGirlsSchools').innerText = agg.girlsSchools;
-  document.getElementById('regClassrooms').innerText = agg.classrooms.toLocaleString();
-  document.getElementById('regDormitories').innerText = agg.dormitories.toLocaleString();
-  
-  document.getElementById('regTeachers').innerText = r.teachers_trained.toLocaleString();
-  document.getElementById('regTextbooks').innerText = r.textbooks_distributed.toLocaleString();
-  document.getElementById('regGirlsAep').innerText = r.aep_girls_registered.toLocaleString();
-  document.getElementById('regComputers').innerText = r.ict_computers.toLocaleString();
-  document.getElementById('regSafeSchools').innerText = r.safe_schools_reached.toLocaleString();
-  
+
   // Set region metadata badge based on location
   const northRegions = ['Kagera', 'Mwanza', 'Mara', 'Geita', 'Shinyanga', 'Simiyu', 'Arusha', 'Kilimanjaro', 'Manyara'];
   const southRegions = ['Rukwa', 'Mbeya', 'Songwe', 'Njombe', 'Iringa', 'Ruvuma', 'Lindi', 'Mtwara'];
@@ -411,6 +457,83 @@ function renderRegionDetails(regionName) {
   else if (centralRegions.includes(regionName)) zone = 'Central/Western Zone';
   
   document.getElementById('regionZoneTag').innerText = zone;
+
+  // Dynamically render selected metrics grid
+  const gridContainer = document.getElementById('regionalStatsGrid');
+  if (!gridContainer) return;
+  
+  const checkboxes = Array.from(document.querySelectorAll('.metric-display-cb:checked'));
+  let html = '';
+  
+  checkboxes.forEach(cb => {
+    const valKey = cb.value;
+    const count = getMetricValue(regionName, valKey);
+    const title = metricTitles[valKey] || valKey;
+    const color = metricColors[valKey] || 'var(--text-primary)';
+    
+    html += `
+      <div class="regional-metric-card" style="transition: var(--transition);">
+        <div class="regional-metric-num" style="color: ${color};">${count.toLocaleString()}</div>
+        <div class="regional-metric-lbl">${title}</div>
+      </div>
+    `;
+  });
+  
+  if (checkboxes.length === 0) {
+    html = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.8rem;">
+        No metrics selected. Click "Choose Metrics to Display" to select dashboard cards.
+      </div>
+    `;
+  }
+  
+  gridContainer.innerHTML = html;
+}
+
+function initMetricsCustomizer() {
+  const btnTogglePanel = document.getElementById('btnToggleMetricsPanel');
+  const panel = document.getElementById('metricsSelectorPanel');
+  const btnSelectAll = document.getElementById('btnSelectAllMetrics');
+  const btnClearAll = document.getElementById('btnClearAllMetrics');
+  
+  if (btnTogglePanel && panel) {
+    btnTogglePanel.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = panel.style.display === 'block';
+      panel.style.display = isVisible ? 'none' : 'block';
+    });
+    
+    // Close panel on outside click
+    document.addEventListener('click', (e) => {
+      if (panel.style.display === 'block' && !panel.contains(e.target) && e.target !== btnTogglePanel) {
+        panel.style.display = 'none';
+      }
+    });
+    
+    // Checkbox change handlers
+    document.querySelectorAll('.metric-display-cb').forEach(cb => {
+      cb.addEventListener('change', () => {
+        renderRegionDetails(activeRegion);
+      });
+    });
+    
+    // Select all / Clear all
+    if (btnSelectAll) {
+      btnSelectAll.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.metric-display-cb').forEach(cb => cb.checked = true);
+        renderRegionDetails(activeRegion);
+      });
+    }
+    
+    if (btnClearAll) {
+      btnClearAll.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.metric-display-cb').forEach(cb => cb.checked = false);
+        renderRegionDetails(activeRegion);
+      });
+    }
+  }
 }
 
 // Search Feature
@@ -983,14 +1106,11 @@ function getMetricValue(regionName, metric) {
   const regData = SEQUIP_DATA.regional[regNameNorm] || {};
   const infra = regionalClassroomsAndDorms[regNameNorm] || {};
   
-  if (metric === 'schools') return regData.schools || infra.newSchools || 0;
-  if (metric === 'girls_schools') return infra.girlsSchools || regData.girls_science_schools || 0;
-  if (metric === 'classrooms') return infra.classrooms || 0;
-  if (metric === 'dormitories') return infra.dormitories || 0;
-  if (metric === 'teachers_trained') return regData.teachers_trained || 0;
-  if (metric === 'textbooks_distributed') return regData.textbooks_distributed || 0;
+  if (metric === 'dormitories') {
+    return infra.dormitories || 0;
+  }
   
-  return 0;
+  return regData[metric] || 0;
 }
 
 function calculateMetricThresholds() {
@@ -1023,18 +1143,10 @@ function calculateMetricThresholds() {
   }
 }
 
+
 function renderMapLegend() {
   const legendContainer = document.getElementById('mapLegend');
   if (!legendContainer) return;
-  
-  const metricTitles = {
-    'schools': "New Schools Built",
-    'girls_schools': "Girls' Schools Built",
-    'classrooms': "Classrooms Built",
-    'dormitories': "Dormitories Built",
-    'teachers_trained': "Teachers Trained",
-    'textbooks_distributed': "Textbooks Distributed"
-  };
   
   const title = metricTitles[activeMapMetric] || "Project Metric";
   
@@ -1128,41 +1240,40 @@ function renderMapLayers() {
       const regData = SEQUIP_DATA.regional[regionName] || { schools: 0, teachers_trained: 0, textbooks_distributed: 0, girls_science_schools: 0 };
       const infra = regionalClassroomsAndDorms[regionName] || { classrooms: 0, dormitories: 0, girlsSchools: 0 };
       
-      const isSchools = activeMapMetric === 'schools';
-      const isClassrooms = activeMapMetric === 'classrooms';
-      const isDorms = activeMapMetric === 'dormitories';
-      const isTeachers = activeMapMetric === 'teachers_trained';
-      const isTextbooks = activeMapMetric === 'textbooks_distributed';
-      const isGirls = activeMapMetric === 'girls_schools';
+      const count = getMetricValue(regionName, activeMapMetric);
+      const title = metricTitles[activeMapMetric] || "Active Metric";
       
       const tooltipContent = `
-        <div class="map-tooltip-popup">
+        <div class="map-tooltip-popup" style="min-width: 200px;">
           <h4 style="font-family: var(--font-title); font-size: 0.85rem; font-weight: 700; color: var(--accent-green); margin-bottom: 6px; border-bottom: 1px solid var(--border-card); padding-bottom: 4px;">${regionName} Region</h4>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isSchools ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
-            <span style="${isSchools ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">New Schools:</span>
-            <span style="${isSchools ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${regData.schools}</span>
+          
+          <!-- Selected Active Metric Highlight -->
+          <div style="background: rgba(0, 230, 118, 0.08); border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; border: 1px solid rgba(0, 230, 118, 0.2);">
+            <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary);">${title}</div>
+            <div style="font-size: 1.1rem; font-weight: 800; color: var(--accent-gold);">${count.toLocaleString()}</div>
           </div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isGirls ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
-            <span style="${isGirls ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Girls' Schools:</span>
-            <span style="${isGirls ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(infra.girlsSchools || regData.girls_science_schools || 0)}</span>
+          
+          <!-- Key Background Metrics -->
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;">
+            <span style="color: var(--text-secondary);">New Schools:</span>
+            <span style="color: var(--text-primary); font-weight: 600;">${regData.schools}</span>
           </div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isClassrooms ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
-            <span style="${isClassrooms ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Classrooms:</span>
-            <span style="${isClassrooms ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(infra.classrooms || 0).toLocaleString()}</span>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;">
+            <span style="color: var(--text-secondary);">Classrooms Built:</span>
+            <span style="color: var(--text-primary); font-weight: 600;">${(regData.classrooms_built || 0).toLocaleString()}</span>
           </div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isDorms ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
-            <span style="${isDorms ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Dormitories:</span>
-            <span style="${isDorms ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(infra.dormitories || 0).toLocaleString()}</span>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;">
+            <span style="color: var(--text-secondary);">Dormitories Built:</span>
+            <span style="color: var(--text-primary); font-weight: 600;">${(infra.dormitories || 0).toLocaleString()}</span>
           </div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isTeachers ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
-            <span style="${isTeachers ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Teachers Trained:</span>
-            <span style="${isTeachers ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(regData.teachers_trained || 0).toLocaleString()}</span>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;">
+            <span style="color: var(--text-secondary);">Teachers Trained:</span>
+            <span style="color: var(--text-primary); font-weight: 600;">${(regData.teachers_trained || 0).toLocaleString()}</span>
           </div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isTextbooks ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
-            <span style="${isTextbooks ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Textbooks:</span>
-            <span style="${isTextbooks ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(regData.textbooks_distributed || 0).toLocaleString()}</span>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;">
+            <span style="color: var(--text-secondary);">Textbooks:</span>
+            <span style="color: var(--text-primary); font-weight: 600;">${(regData.textbooks_distributed || 0).toLocaleString()}</span>
           </div>
-          ${regData.girls_science_schools > 0 ? `<div style="margin-top: 6px; color: var(--accent-green); font-weight: 700;">★ ${regData.girls_science_schools} Girls' School(s) Built</div>` : ''}
         </div>
       `;
 

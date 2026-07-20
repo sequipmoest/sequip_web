@@ -704,12 +704,42 @@
             style="position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; padding: 6px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-card); backdrop-filter: blur(10px); z-index: 1000;">
             <select id="mapMetricSelector" class="map-metric-select"
               style="background: var(--bg-secondary); border: 1px solid var(--border-card); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; outline: none; transition: var(--transition);">
-              <option value="schools">🏫 New Schools</option>
-              <option value="girls_schools">👩‍🎓 Girls' Schools</option>
-              <option value="classrooms">📝 Classrooms Built</option>
-              <option value="dormitories">🛌 Dormitories Built</option>
-              <option value="teachers_trained">🎓 Teachers Trained</option>
-              <option value="textbooks_distributed">📚 Textbooks Distributed</option>
+              <optgroup label="School Infrastructure">
+                <option value="schools">🏫 New Schools Built</option>
+                <option value="ward_schools">🏫 Ward Schools</option>
+                <option value="girls_science_schools">👩‍🎓 Girls' Science Schools</option>
+                <option value="boys_schools">👦 Boys' Schools</option>
+                <option value="vocational_schools">🛠️ Vocational Schools</option>
+                <option value="classrooms_built">📝 Classrooms Built</option>
+                <option value="classrooms_upgraded">🔨 Classrooms Upgraded</option>
+                <option value="science_labs">🧪 Science Labs</option>
+                <option value="teachers_houses">🏠 Teachers' Houses</option>
+                <option value="dormitories">🛌 Dormitories Built</option>
+                <option value="pit_latrines_built">🚻 Pit Latrines Built</option>
+                <option value="pit_latrines_completed">✅ Pit Latrines Completed</option>
+              </optgroup>
+              <optgroup label="Academic & Textbooks">
+                <option value="teachers_trained">🎓 STEM Teachers Trained</option>
+                <option value="textbooks_distributed">📚 Textbooks Distributed</option>
+              </optgroup>
+              <optgroup label="Safe Schools Program">
+                <option value="safe_schools_reached">🛡️ Safe Schools Reached</option>
+                <option value="safe_schools_teachers_trained">🛡️ Safe School Teachers Trained</option>
+              </optgroup>
+              <optgroup label="Alternative Education Pathways (AEP)">
+                <option value="aep_girls_registered">📝 AEP Girls Registered</option>
+                <option value="aep_returned_formal">↩️ AEP Girls Returned to Formal Ed</option>
+                <option value="aep_passed_form_four">🎓 AEP Girls Passed Form 4</option>
+              </optgroup>
+              <optgroup label="ICT & Digital Learning">
+                <option value="ict_computers">💻 ICT Computers</option>
+                <option value="ict_laptops">💻 ICT Laptops</option>
+                <option value="ict_projectors">📹 ICT Projectors</option>
+                <option value="ict_ups">🔋 ICT UPS Units</option>
+                <option value="ict_schools_reached">🏫 ICT Schools Reached</option>
+                <option value="ict_teachers_trained">🎓 ICT Teachers Trained</option>
+                <option value="ict_smartboard_schools">🖥️ ICT Smartboard Schools</option>
+              </optgroup>
             </select>
             <button id="btnChoropleth" class="layer-selector-btn active"
               style="background: var(--accent-green); border: none; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
@@ -756,6 +786,134 @@
                 <select id="compareRegionSelect"
                   style="background: var(--bg-primary); border:1px solid var(--border-card); color:var(--text-primary); border-radius:4px; padding:2px 8px; font-size:0.8rem; font-family:var(--font-body); outline:none;">
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics Display Customization -->
+          <div class="metrics-selector-container" style="margin-bottom: 15px; position: relative;">
+            <button id="btnToggleMetricsPanel" class="switch-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.75rem; padding: 8px 12px; border-radius: 6px; background: var(--bg-secondary); border: 1px solid var(--border-card); color: var(--text-primary); cursor: pointer; font-weight: 600;">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+              Choose Metrics to Display
+            </button>
+            
+            <div id="metricsSelectorPanel"
+              style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 8px; padding: 12px; max-height: 320px; overflow-y: auto; z-index: 1001; box-shadow: var(--shadow-lg); backdrop-filter: blur(15px); margin-top: 5px;">
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border-card); padding-bottom: 6px;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--accent-green);">Select Dashboard Cards</span>
+                <div style="display: flex; gap: 8px;">
+                  <button id="btnSelectAllMetrics" style="background: transparent; border: none; color: var(--accent-gold); cursor: pointer; font-size: 0.65rem; font-weight: 700;">Select All</button>
+                  <button id="btnClearAllMetrics" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.65rem; font-weight: 700;">Clear</button>
+                </div>
+              </div>
+              
+              <div class="metrics-checkbox-grid" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Category 1 -->
+                <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Infrastructure</div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="schools" checked> 🏫 New Schools Built
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="ward_schools"> 🏫 Ward Schools
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="girls_science_schools" checked> 👩‍🎓 Girls' Science Schools
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="boys_schools"> 👦 Boys' Schools
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="vocational_schools"> 🛠️ Vocational Schools
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="classrooms_built" checked> 📝 Classrooms Built
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="classrooms_upgraded"> 🔨 Classrooms Upgraded
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="science_labs"> 🧪 Science Labs
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="teachers_houses"> 🏠 Teachers' Houses
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="dormitories" checked> 🛌 Dormitories Built
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="pit_latrines_built"> 🚻 Pit Latrines Built
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="pit_latrines_completed"> ✅ Pit Latrines Completed
+                  </label>
+                </div>
+
+                <!-- Category 2 -->
+                <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px;">Academic & Resources</div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="teachers_trained" checked> 🎓 STEM Teachers Trained
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="textbooks_distributed" checked> 📚 Textbooks Distributed
+                  </label>
+                </div>
+
+                <!-- Category 3 -->
+                <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px;">Safe Schools</div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="safe_schools_reached" checked> 🛡️ Safe Schools Reached
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="safe_schools_teachers_trained"> 🛡️ Safe School Teachers Trained
+                  </label>
+                </div>
+
+                <!-- Category 4 -->
+                <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px;">Alternative Education</div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="aep_girls_registered" checked> 📝 AEP Girls Registered
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="aep_returned_formal"> ↩️ AEP Girls Returned
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="aep_passed_form_four"> 🎓 AEP Girls Passed Form 4
+                  </label>
+                </div>
+
+                <!-- Category 5 -->
+                <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px;">ICT & Digital</div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="ict_computers"> 💻 ICT Computers
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="ict_laptops"> 💻 ICT Laptops
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="ict_projectors"> 📹 ICT Projectors
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="ict_ups"> 🔋 ICT UPS Units
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="ict_schools_reached" checked> 🏫 ICT Schools Reached
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="ict_teachers_trained"> 🎓 ICT Teachers Trained
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-primary); cursor: pointer;">
+                    <input type="checkbox" class="metric-display-cb" value="ict_smartboard_schools"> 🖥️ ICT Smartboard Schools
+                  </label>
+                </div>
               </div>
             </div>
           </div>
