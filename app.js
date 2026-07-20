@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMapInteractions();
   initSearch();
   initCompare();
+  initCardZoom();
   
   // Initial renders
   renderNationalDashboard();
@@ -99,6 +100,92 @@ function initTheme() {
           }
         });
       }
+    }
+  });
+}
+
+// Card Zoom Interaction Functionality
+function initCardZoom() {
+  let modal = document.getElementById('cardModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'cardModal';
+    modal.className = 'card-modal';
+    modal.innerHTML = `
+      <div class="card-modal-backdrop"></div>
+      <div class="card-modal-content">
+        <button class="card-modal-close" aria-label="Close modal">&times;</button>
+        <div class="card-modal-body"></div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    modal.querySelector('.card-modal-backdrop').addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+    modal.querySelector('.card-modal-close').addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    
+    // Skip if clicking interactive elements inside the card
+    if (e.target.closest('button, input, select, a, .leaflet-container, label, canvas, .tab-btn')) {
+      return;
+    }
+    
+    // Skip if it's map container or map sidebar card
+    if (card.closest('.map-card') || card.closest('.map-sidebar') || card.classList.contains('map-card') || card.classList.contains('map-sidebar')) {
+      return;
+    }
+    
+    const body = modal.querySelector('.card-modal-body');
+    body.innerHTML = '';
+    
+    const clone = card.cloneNode(true);
+    
+    const originalCanvas = card.querySelector('canvas');
+    let modalChartId = null;
+    let modalTooltipId = null;
+    
+    if (originalCanvas) {
+      const newCanvas = clone.querySelector('canvas');
+      modalChartId = 'modal_' + originalCanvas.id;
+      newCanvas.id = modalChartId;
+      
+      const detailBox = clone.querySelector('.chart-details-box');
+      if (detailBox) {
+        modalTooltipId = 'modal_' + detailBox.id;
+        detailBox.id = modalTooltipId;
+      }
+    }
+    
+    body.appendChild(clone);
+    modal.classList.add('active');
+    
+    if (originalCanvas && modalChartId) {
+      setTimeout(() => {
+        const isDark = currentTheme === 'dark';
+        const canvasElement = document.getElementById(modalChartId);
+        if (canvasElement) {
+          if (originalCanvas.id === 'budgetAllocationChart') {
+            drawBudgetChart(canvasElement, isDark, modalTooltipId || 'modal_budgetChartTooltip');
+          } else if (originalCanvas.id === 'infrastructureVolumeChart') {
+            drawInfrastructureChart(canvasElement, isDark);
+          } else if (originalCanvas.id === 'regionalDistributionChart') {
+            drawRegionalChart(canvasElement, isDark);
+          }
+        }
+      }, 50);
     }
   });
 }
@@ -497,314 +584,293 @@ function animateNectaBars() {
 
 let charts = {};
 
-// Render all M&E Chart.js charts
+// Modular Chart.js Drawing Helpers
+function drawBudgetChart(ctx, isDark, tooltipId) {
+  if (typeof Chart === 'undefined') return null;
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)';
+  const fontName = 'Inter, sans-serif';
+  
+  const nameMap = {
+    "UJENZI WA SHULE MPYA (New Schools)": "New Schools",
+    "UJENZI WA SHULE ZA WASICHANA (Girls' Schools)": "Girls' Schools",
+    "UJENZI WA SHULE ZA WAVULANA (Boys' Schools)": "Boys' Schools",
+    "NYUMBA (Houses)": "Staff Houses",
+    "UKARABATI (Renovations)": "Renovations",
+    "MABWENI (Dormitories)": "Dormitories",
+    "MADARASA (Classrooms)": "Classrooms",
+    "VYOO (Toilets)": "Toilet Units",
+    "MAABARA (Laboratories)": "Laboratories"
+  };
+  
+  const budgetLabels = SEQUIP_ME_DATA.Summary_Totals.map(item => nameMap[item.Activity] || item.Activity);
+  const budgetValues = SEQUIP_ME_DATA.Summary_Totals.map(item => item.Amount_TZS);
+  
+  const budgetColors = [
+    '#00e5ff', '#e040fb', '#2196f3', '#ffd54f', '#ff5252', '#00e676', '#81c784', '#64748b', '#ff8a65'
+  ];
+  
+  return new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: budgetLabels,
+      datasets: [{
+        data: budgetValues,
+        backgroundColor: budgetColors,
+        borderWidth: isDark ? 2 : 1,
+        borderColor: isDark ? '#0f1621' : '#fff',
+        hoverOffset: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: isDark ? '#0f1621' : '#fff',
+          titleColor: isDark ? '#fff' : '#0f172a',
+          bodyColor: isDark ? '#94a3b8' : '#475569',
+          borderColor: gridColor,
+          borderWidth: 1,
+          callbacks: {
+            label: function(context) {
+              const val = context.raw;
+              const billionVal = (val / 1e9).toFixed(2);
+              return ` ${billionVal}B TZS`;
+            }
+          }
+        }
+      },
+      onHover: (evt, activeEls) => {
+        const tooltipEl = document.getElementById(tooltipId);
+        if (!tooltipEl) return;
+        if (activeEls.length > 0) {
+          const idx = activeEls[0].index;
+          const label = budgetLabels[idx];
+          const val = budgetValues[idx];
+          const pct = ((val / 772478159166) * 100).toFixed(1);
+          tooltipEl.innerHTML = `<span style="color: ${budgetColors[idx]}; font-weight: 700;">${label}</span>: <strong>${(val / 1e9).toFixed(2)} Billion TZS</strong> (${pct}%)`;
+        } else {
+          tooltipEl.innerHTML = "Hover over sections to see category details";
+        }
+      }
+    }
+  });
+}
+
+function drawInfrastructureChart(ctx, isDark) {
+  if (typeof Chart === 'undefined') return null;
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)';
+  const nameMap = {
+    "UJENZI WA SHULE MPYA (New Schools)": "New Schools",
+    "UJENZI WA SHULE ZA WASICHANA (Girls' Schools)": "Girls' Schools",
+    "UJENZI WA SHULE ZA WAVULANA (Boys' Schools)": "Boys' Schools",
+    "NYUMBA (Houses)": "Staff Houses",
+    "UKARABATI (Renovations)": "Renovations",
+    "MABWENI (Dormitories)": "Dormitories",
+    "MADARASA (Classrooms)": "Classrooms",
+    "VYOO (Toilets)": "Toilet Units",
+    "MAABARA (Laboratories)": "Laboratories"
+  };
+  
+  const sortedTotals = [...SEQUIP_ME_DATA.Summary_Totals].sort((a, b) => b.Count - a.Count);
+  const infraLabels = sortedTotals.map(item => nameMap[item.Activity] || item.Activity);
+  const infraValues = sortedTotals.map(item => item.Count);
+  
+  const infraColors = sortedTotals.map((item) => {
+    if (item.Activity.includes("VYOO")) return '#e040fb';
+    if (item.Activity.includes("MADARASA")) return '#00e676';
+    if (item.Activity.includes("SHULE MPYA")) return '#00e5ff';
+    if (item.Activity.includes("MABWENI")) return '#2196f3';
+    if (item.Activity.includes("NYUMBA")) return '#ffd54f';
+    if (item.Activity.includes("MAABARA")) return '#ff8a65';
+    return '#64748b';
+  });
+  
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: infraLabels,
+      datasets: [{
+        label: 'Units Built',
+        data: infraValues,
+        backgroundColor: infraColors,
+        borderRadius: 6,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: isDark ? '#0f1621' : '#fff',
+          titleColor: isDark ? '#fff' : '#0f172a',
+          bodyColor: isDark ? '#94a3b8' : '#475569',
+          borderColor: gridColor,
+          borderWidth: 1,
+          callbacks: {
+            label: function(context) {
+              return ` ${context.raw} units`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function drawRegionalChart(ctx, isDark) {
+  if (typeof Chart === 'undefined') return null;
+  const textColor = isDark ? '#94a3b8' : '#475569';
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)';
+  const fontName = 'Inter, sans-serif';
+  
+  const regionalDataMap = {};
+  SEQUIP_ME_DATA.District_Data.forEach(row => {
+    const region = row[0];
+    const dorms = parseInt(row[4]) || 0;
+    const classrooms = parseInt(row[5]) || 0;
+    
+    const titleCaseRegion = region.toLowerCase().split(' ').map(word => {
+      if (word === 'es') return 'es';
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
+    
+    if (!regionalDataMap[titleCaseRegion]) {
+      regionalDataMap[titleCaseRegion] = {
+        classrooms: 0,
+        dormitories: 0
+      };
+    }
+    regionalDataMap[titleCaseRegion].classrooms += classrooms;
+    regionalDataMap[titleCaseRegion].dormitories += dorms;
+  });
+  
+  const regionalList = Object.entries(regionalDataMap).map(([name, data]) => ({
+    name,
+    classrooms: data.classrooms,
+    dormitories: data.dormitories,
+    total: data.classrooms + data.dormitories
+  }));
+  
+  regionalList.sort((a, b) => b.total - a.total);
+  
+  const regLabels = regionalList.map(item => item.name);
+  const classroomsValues = regionalList.map(item => item.classrooms);
+  const dormsValues = regionalList.map(item => item.dormitories);
+  
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: regLabels,
+      datasets: [
+        {
+          label: 'Classrooms',
+          data: classroomsValues,
+          backgroundColor: isDark ? 'rgba(0, 230, 118, 0.85)' : 'rgba(0, 168, 107, 0.85)',
+          borderRadius: 4,
+          borderWidth: 0
+        },
+        {
+          label: 'Dormitories',
+          data: dormsValues,
+          backgroundColor: isDark ? 'rgba(224, 64, 251, 0.85)' : 'rgba(156, 39, 176, 0.85)',
+          borderRadius: 4,
+          borderWidth: 0
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            color: textColor,
+            font: {
+              family: fontName,
+              size: 9
+            }
+          }
+        },
+        tooltip: {
+          backgroundColor: isDark ? '#0f1621' : '#fff',
+          titleColor: isDark ? '#fff' : '#0f172a',
+          bodyColor: isDark ? '#94a3b8' : '#475569',
+          borderColor: gridColor,
+          borderWidth: 1,
+          callbacks: {
+            label: function(context) {
+              return ` ${context.dataset.label}: ${context.raw.toLocaleString()}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: {
+            color: gridColor
+          },
+          ticks: {
+            color: textColor,
+            font: {
+              family: fontName,
+              size: 9
+            }
+          }
+        },
+        y: {
+          stacked: true,
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: textColor,
+            autoSkip: false,
+            font: {
+              family: fontName,
+              size: 9,
+              weight: '600'
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
 function renderAllCharts() {
   if (typeof Chart === 'undefined') return;
 
-  // Destroy existing charts to prevent ghost renders on hover
   if (charts.budget) charts.budget.destroy();
   if (charts.infrastructure) charts.infrastructure.destroy();
   if (charts.regional) charts.regional.destroy();
   
   const isDark = currentTheme === 'dark';
-  const textColor = isDark ? '#94a3b8' : '#475569';
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)';
-  const fontName = 'Inter, sans-serif';
   
-  // 1. Budget Allocation Chart (Donut Chart)
   const ctxBudget = document.getElementById('budgetAllocationChart');
   if (ctxBudget) {
-    const nameMap = {
-      "UJENZI WA SHULE MPYA (New Schools)": "New Schools",
-      "UJENZI WA SHULE ZA WASICHANA (Girls' Schools)": "Girls' Schools",
-      "UJENZI WA SHULE ZA WAVULANA (Boys' Schools)": "Boys' Schools",
-      "NYUMBA (Houses)": "Staff Houses",
-      "UKARABATI (Renovations)": "Renovations",
-      "MABWENI (Dormitories)": "Dormitories",
-      "MADARASA (Classrooms)": "Classrooms",
-      "VYOO (Toilets)": "Toilet Units",
-      "MAABARA (Laboratories)": "Laboratories"
-    };
-    
-    const budgetLabels = SEQUIP_ME_DATA.Summary_Totals.map(item => nameMap[item.Activity] || item.Activity);
-    const budgetValues = SEQUIP_ME_DATA.Summary_Totals.map(item => item.Amount_TZS);
-    
-    const budgetColors = [
-      '#00e5ff', // Accent Blue
-      '#e040fb', // Purple (Girls)
-      '#2196f3', // Darker Blue (Boys)
-      '#ffd54f', // Gold
-      '#ff5252', // Red
-      '#00e676', // Green
-      '#81c784', // Light Green
-      '#64748b', // Grey-Blue
-      '#ff8a65'  // Coral
-    ];
-    
-    charts.budget = new Chart(ctxBudget, {
-      type: 'doughnut',
-      data: {
-        labels: budgetLabels,
-        datasets: [{
-          data: budgetValues,
-          backgroundColor: budgetColors,
-          borderWidth: isDark ? 2 : 1,
-          borderColor: isDark ? '#0f1621' : '#fff',
-          hoverOffset: 10
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            backgroundColor: isDark ? '#0f1621' : '#fff',
-            titleColor: isDark ? '#fff' : '#0f172a',
-            bodyColor: isDark ? '#94a3b8' : '#475569',
-            borderColor: gridColor,
-            borderWidth: 1,
-            callbacks: {
-              label: function(context) {
-                const val = context.raw;
-                const billionVal = (val / 1e9).toFixed(2);
-                return ` ${billionVal}B TZS`;
-              }
-            }
-          }
-        },
-        onHover: (evt, activeEls) => {
-          const tooltipEl = document.getElementById('budgetChartTooltip');
-          if (!tooltipEl) return;
-          if (activeEls.length > 0) {
-            const idx = activeEls[0].index;
-            const label = budgetLabels[idx];
-            const val = budgetValues[idx];
-            const pct = ((val / 772478159166) * 100).toFixed(1);
-            tooltipEl.innerHTML = `<span style="color: ${budgetColors[idx]}; font-weight: 700;">${label}</span>: <strong>${(val / 1e9).toFixed(2)} Billion TZS</strong> (${pct}%)`;
-          } else {
-            tooltipEl.innerHTML = "Hover over sections to see category details";
-          }
-        }
-      }
-    });
+    charts.budget = drawBudgetChart(ctxBudget, isDark, 'budgetChartTooltip');
   }
   
-  // 2. Infrastructure Volume Chart (Bar Chart)
   const ctxInfra = document.getElementById('infrastructureVolumeChart');
   if (ctxInfra) {
-    const nameMap = {
-      "UJENZI WA SHULE MPYA (New Schools)": "New Schools",
-      "UJENZI WA SHULE ZA WASICHANA (Girls' Schools)": "Girls' Schools",
-      "UJENZI WA SHULE ZA WAVULANA (Boys' Schools)": "Boys' Schools",
-      "NYUMBA (Houses)": "Staff Houses",
-      "UKARABATI (Renovations)": "Renovations",
-      "MABWENI (Dormitories)": "Dormitories",
-      "MADARASA (Classrooms)": "Classrooms",
-      "VYOO (Toilets)": "Toilet Units",
-      "MAABARA (Laboratories)": "Laboratories"
-    };
-    
-    const sortedTotals = [...SEQUIP_ME_DATA.Summary_Totals].sort((a, b) => b.Count - a.Count);
-    const infraLabels = sortedTotals.map(item => nameMap[item.Activity] || item.Activity);
-    const infraValues = sortedTotals.map(item => item.Count);
-    
-    const infraColors = sortedTotals.map((item, idx) => {
-      if (item.Activity.includes("VYOO")) return '#e040fb'; // Purple
-      if (item.Activity.includes("MADARASA")) return '#00e676'; // Green
-      if (item.Activity.includes("SHULE MPYA")) return '#00e5ff'; // Blue
-      if (item.Activity.includes("MABWENI")) return '#2196f3'; // Darker Blue
-      if (item.Activity.includes("NYUMBA")) return '#ffd54f'; // Gold
-      if (item.Activity.includes("MAABARA")) return '#ff8a65'; // Coral
-      return '#64748b'; // Grey
-    });
-    
-    charts.infrastructure = new Chart(ctxInfra, {
-      type: 'bar',
-      data: {
-        labels: infraLabels,
-        datasets: [{
-          label: 'Units Built',
-          data: infraValues,
-          backgroundColor: infraColors,
-          borderRadius: 6,
-          borderWidth: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            backgroundColor: isDark ? '#0f1621' : '#fff',
-            titleColor: isDark ? '#fff' : '#0f172a',
-            bodyColor: isDark ? '#94a3b8' : '#475569',
-            borderColor: gridColor,
-            borderWidth: 1,
-            callbacks: {
-              label: function(context) {
-                return ` ${context.raw.toLocaleString()} Units`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: {
-              display: false
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: fontName,
-                size: 9,
-                weight: '500'
-              }
-            }
-          },
-          y: {
-            grid: {
-              color: gridColor
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: fontName,
-                size: 9
-              }
-            }
-          }
-        }
-      }
-    });
+    charts.infrastructure = drawInfrastructureChart(ctxInfra, isDark);
   }
   
-  // 3. Regional Distribution Chart (Horizontal Stacked Bar Chart of Classrooms vs Dormitories)
   const ctxRegional = document.getElementById('regionalDistributionChart');
   if (ctxRegional) {
-    const regionalDataMap = {};
-    
-    SEQUIP_ME_DATA.District_Data.forEach(row => {
-      const region = row[0];
-      const dorms = parseInt(row[4]) || 0;
-      const classrooms = parseInt(row[5]) || 0;
-      
-      const titleCaseRegion = region.toLowerCase().split(' ').map(word => {
-        if (word === 'es') return 'es';
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      }).join(' ');
-      
-      if (!regionalDataMap[titleCaseRegion]) {
-        regionalDataMap[titleCaseRegion] = {
-          classrooms: 0,
-          dormitories: 0
-        };
-      }
-      regionalDataMap[titleCaseRegion].classrooms += classrooms;
-      regionalDataMap[titleCaseRegion].dormitories += dorms;
-    });
-    
-    const regionalList = Object.entries(regionalDataMap).map(([name, data]) => ({
-      name,
-      classrooms: data.classrooms,
-      dormitories: data.dormitories,
-      total: data.classrooms + data.dormitories
-    }));
-    
-    // Sort descending by classrooms + dormitories count
-    regionalList.sort((a, b) => b.total - a.total);
-    
-    const regLabels = regionalList.map(item => item.name);
-    const classroomsValues = regionalList.map(item => item.classrooms);
-    const dormsValues = regionalList.map(item => item.dormitories);
-    
-    charts.regional = new Chart(ctxRegional, {
-      type: 'bar',
-      data: {
-        labels: regLabels,
-        datasets: [
-          {
-            label: 'Classrooms',
-            data: classroomsValues,
-            backgroundColor: isDark ? 'rgba(0, 230, 118, 0.85)' : 'rgba(0, 168, 107, 0.85)',
-            borderRadius: 4,
-            borderWidth: 0
-          },
-          {
-            label: 'Dormitories',
-            data: dormsValues,
-            backgroundColor: isDark ? 'rgba(224, 64, 251, 0.85)' : 'rgba(156, 39, 176, 0.85)',
-            borderRadius: 4,
-            borderWidth: 0
-          }
-        ]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            labels: {
-              color: textColor,
-              font: {
-                family: fontName,
-                size: 9
-              }
-            }
-          },
-          tooltip: {
-            backgroundColor: isDark ? '#0f1621' : '#fff',
-            titleColor: isDark ? '#fff' : '#0f172a',
-            bodyColor: isDark ? '#94a3b8' : '#475569',
-            borderColor: gridColor,
-            borderWidth: 1,
-            callbacks: {
-              label: function(context) {
-                return ` ${context.dataset.label}: ${context.raw.toLocaleString()}`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            stacked: true,
-            grid: {
-              color: gridColor
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: fontName,
-                size: 9
-              }
-            }
-          },
-          y: {
-            stacked: true,
-            grid: {
-              display: false
-            },
-            ticks: {
-              color: textColor,
-              autoSkip: false,
-              font: {
-                family: fontName,
-                size: 9,
-                weight: '600'
-              }
-            }
-          }
-        }
-      }
-    });
+    charts.regional = drawRegionalChart(ctxRegional, isDark);
   }
 }
 

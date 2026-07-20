@@ -4,7 +4,7 @@
   /* Colors */
   --bg-primary: #090e14;
   --bg-secondary: #0f1621;
-  --bg-card: rgba(22, 33, 49, 0.45);
+  --bg-card: rgba(15, 23, 42, 0.25);
   --border-card: rgba(255, 255, 255, 0.08);
   --border-glow: rgba(0, 230, 118, 0.2);
   
@@ -37,7 +37,7 @@
 [data-theme="light"] {
   --bg-primary: #f1f5f9;
   --bg-secondary: #e2e8f0;
-  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-card: rgba(255, 255, 255, 0.4);
   --border-card: rgba(15, 23, 42, 0.08);
   --border-glow: rgba(0, 230, 118, 0.4);
   
@@ -214,18 +214,21 @@ body {
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-card);
-  border-radius: 16px;
-  backdrop-filter: blur(16px);
-  padding: 1.5rem;
+  border-radius: 20px;
+  backdrop-filter: blur(24px) saturate(125%);
+  -webkit-backdrop-filter: blur(24px) saturate(125%);
+  padding: 1.75rem;
   box-shadow: var(--shadow-md);
   transition: var(--transition);
   overflow: hidden;
+  position: relative;
+  cursor: pointer;
 }
 
 .card:hover {
   border-color: var(--border-glow);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 230, 118, 0.15);
 }
 
 /* View 1: Hero Metric Grid Layout */
@@ -1740,3 +1743,142 @@ body {
   padding: 0;
   border: none;
 }
+
+/* Card Zoom Modal */
+.card-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.card-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.card-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 7, 13, 0.7);
+  backdrop-filter: blur(16px);
+}
+
+.card-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 700px;
+  max-height: 85vh;
+  z-index: 10001;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 2.5rem;
+  overflow-y: auto;
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--shadow-lg), 0 20px 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(30px) saturate(130%);
+}
+
+[data-theme="light"] .card-modal-content {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.card-modal.active .card-modal-content {
+  transform: scale(1);
+}
+
+.card-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 10002;
+}
+
+[data-theme="light"] .card-modal-close {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.card-modal-close:hover {
+  background: var(--accent-red);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.card-modal-body {
+  width: 100%;
+}
+
+.card-modal-body .card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  padding: 0 !important;
+  backdrop-filter: none !important;
+  cursor: default !important;
+}
+
+.card-modal-body .card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Colorful Emojis Styling */
+.colorful-emoji {
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+  line-height: 1;
+}
+
+.colorful-emoji:hover {
+  transform: scale(1.2);
+}
+
+.emoji-gold {
+  filter: drop-shadow(0 0 6px rgba(255, 193, 7, 0.7));
+}
+
+.emoji-blue {
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.7));
+}
+
+.emoji-green {
+  filter: drop-shadow(0 0 6px rgba(0, 230, 118, 0.7));
+}
+
+.emoji-purple {
+  filter: drop-shadow(0 0 6px rgba(224, 64, 251, 0.7));
+}
+
+.emoji-red {
+  filter: drop-shadow(0 0 6px rgba(255, 82, 82, 0.7));
+}
+
