@@ -1,43 +1,47 @@
 from html.parser import HTMLParser
 
-class TagChecker(HTMLParser):
+class ErrorOnlyTagChecker(HTMLParser):
     def __init__(self):
         super().__init__()
         self.stack = []
         self.errors = []
         
     def handle_starttag(self, tag, attrs):
-        # Ignore self-closing tags in HTML
         if tag in ["img", "input", "br", "hr", "meta", "link", "circle", "rect", "path", "polygon", "polyline", "line"]:
             return
-        self.stack.append((tag, self.getpos()))
+        attrs_dict = dict(attrs)
+        tag_id = attrs_dict.get("id", "")
+        tag_class = attrs_dict.get("class", "")
+        desc = tag
+        if tag_id:
+            desc += f"#{tag_id}"
+        if tag_class:
+            desc += f".{tag_class.replace(' ', '.')}"
+        self.stack.append((desc, self.getpos()))
         
     def handle_endtag(self, tag):
         if tag in ["img", "input", "br", "hr", "meta", "link", "circle", "rect", "path", "polygon", "polyline", "line"]:
             return
         if not self.stack:
-            self.errors.append(f"Unexpected closing tag: </{tag}> at line {self.getpos()[0]}")
+            self.errors.append(f"Unexpected closing tag </{tag}> at line {self.getpos()[0]}")
             return
-        expected_tag, pos = self.stack.pop()
+        expected_desc, pos = self.stack.pop()
+        expected_tag = expected_desc.split("#")[0].split(".")[0]
         if expected_tag != tag:
-            self.errors.append(f"Mismatched tag: expected </{expected_tag}> (opened at line {pos[0]}), but found </{tag}> at line {self.getpos()[0]}")
-            # Put back to keep stack aligned if possible
-            self.stack.append((expected_tag, pos))
+            self.errors.append(f"Mismatched tag: expected </{expected_tag}> (from <{expected_desc}> opened at line {pos[0]}), but found </{tag}> at line {self.getpos()[0]}")
+            self.stack.append((expected_desc, pos))
 
 with open("index.html", "r", encoding="utf-8") as f:
     html = f.read()
 
-checker = TagChecker()
+checker = ErrorOnlyTagChecker()
 checker.feed(html)
 
-print("HTML Tag Validation Report:")
-if checker.errors:
-    for err in checker.errors:
-        print("Error:", err)
-else:
-    print("No mismatched tags found.")
-    
+print("HTML validation errors found:")
+for err in checker.errors:
+    print(err)
+
 if checker.stack:
-    print("Unclosed tags remaining on stack:")
-    for tag, pos in reversed(checker.stack):
-        print(f"Tag <{tag}> opened at line {pos[0]} is never closed.")
+    print("\nUnclosed tags remaining on stack:")
+    for desc, pos in reversed(checker.stack):
+        print(f"<{desc}> opened at line {pos[0]} is never closed.")
