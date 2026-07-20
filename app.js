@@ -149,9 +149,6 @@ function initLayoutSwitcher() {
       }, 100);
     }
   });
-      }, 50);
-    }
-  });
 
   aboutBtn.addEventListener('click', () => {
     currentLayout = 'about';
