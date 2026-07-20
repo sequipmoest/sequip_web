@@ -702,9 +702,18 @@
           <!-- Custom Floating Layer Selector -->
           <div class="map-layer-selector"
             style="position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; padding: 6px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-card); backdrop-filter: blur(10px); z-index: 1000;">
+            <select id="mapMetricSelector" class="map-metric-select"
+              style="background: var(--bg-secondary); border: 1px solid var(--border-card); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; outline: none; transition: var(--transition);">
+              <option value="schools">🏫 New Schools</option>
+              <option value="girls_schools">👩‍🎓 Girls' Schools</option>
+              <option value="classrooms">📝 Classrooms Built</option>
+              <option value="dormitories">🛌 Dormitories Built</option>
+              <option value="teachers_trained">🎓 Teachers Trained</option>
+              <option value="textbooks_distributed">📚 Textbooks Distributed</option>
+            </select>
             <button id="btnChoropleth" class="layer-selector-btn active"
               style="background: var(--accent-green); border: none; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
-              New Schools Density
+              Density Map
             </button>
             <button id="btnPoints" class="layer-selector-btn"
               style="background: transparent; border: none; color: var(--text-secondary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
@@ -722,34 +731,8 @@
           </div>
 
           <!-- Choropleth Map Legend -->
-          <div class="map-choropleth-legend"
+          <div id="mapLegend" class="map-choropleth-legend"
             style="position: absolute; bottom: 15px; left: 15px; display: flex; flex-direction: column; gap: 8px; padding: 12px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-card); backdrop-filter: blur(10px); z-index: 1000;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">New
-              Schools Built</div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <div
-                style="width: 12px; height: 12px; background: var(--choropleth-level-1); border-radius: 2px; border: 1px solid var(--border-card);">
-              </div>
-              <span style="font-size: 0.7rem; color: var(--text-secondary);">1 - 20 schools</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <div
-                style="width: 12px; height: 12px; background: var(--choropleth-level-2); border-radius: 2px; border: 1px solid var(--border-card);">
-              </div>
-              <span style="font-size: 0.7rem; color: var(--text-secondary);">21 - 30 schools</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <div
-                style="width: 12px; height: 12px; background: var(--choropleth-level-3); border-radius: 2px; border: 1px solid var(--border-card);">
-              </div>
-              <span style="font-size: 0.7rem; color: var(--text-secondary);">31 - 40 schools</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <div
-                style="width: 12px; height: 12px; background: var(--choropleth-level-4); border-radius: 2px; border: 1px solid var(--border-card);">
-              </div>
-              <span style="font-size: 0.7rem; color: var(--text-secondary);">41+ schools</span>
-            </div>
           </div>
         </div>
       </section>

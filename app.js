@@ -43,6 +43,8 @@ let geoJsonLayer = null;
 let girlsSchoolsLayerGroup = null;
 let regionsGeoJSON = null;
 let activeMapLayer = 'choropleth'; // 'choropleth' or 'points'
+let activeMapMetric = 'schools'; // 'schools', 'girls_schools', 'classrooms', 'dormitories', 'teachers_trained', 'textbooks_distributed'
+let currentMetricThresholds = [20, 30, 40, 50];
 let regionalClassroomsAndDorms = {};
 
 // DOM Elements
@@ -318,6 +320,9 @@ function initMapInteractions() {
       
       // Aggregate classrooms and dormitories by region
       aggregateRegionalClassroomsAndDorms();
+      
+      calculateMetricThresholds();
+      renderMapLegend();
 
       // Render default Choropleth layer
       renderMapLayers();
@@ -973,6 +978,112 @@ function updateMapTiles() {
   // Standalone vector map (no background tiles served)
 }
 
+function getMetricValue(regionName, metric) {
+  const regNameNorm = normalizeRegionName(regionName);
+  const regData = SEQUIP_DATA.regional[regNameNorm] || {};
+  const infra = regionalClassroomsAndDorms[regNameNorm] || {};
+  
+  if (metric === 'schools') return regData.schools || infra.newSchools || 0;
+  if (metric === 'girls_schools') return infra.girlsSchools || regData.girls_science_schools || 0;
+  if (metric === 'classrooms') return infra.classrooms || 0;
+  if (metric === 'dormitories') return infra.dormitories || 0;
+  if (metric === 'teachers_trained') return regData.teachers_trained || 0;
+  if (metric === 'textbooks_distributed') return regData.textbooks_distributed || 0;
+  
+  return 0;
+}
+
+function calculateMetricThresholds() {
+  const values = Object.keys(SEQUIP_DATA.regional).map(regionName => {
+    return getMetricValue(regionName, activeMapMetric);
+  }).filter(val => val > 0);
+  
+  if (values.length === 0) {
+    currentMetricThresholds = [1, 2, 3, 4];
+    return;
+  }
+  
+  const max = Math.max(...values);
+  const min = Math.min(...values);
+  
+  const diff = max - min;
+  if (diff <= 3) {
+    currentMetricThresholds = [1, 2, 3, Math.max(4, max)];
+  } else {
+    const q1 = min + diff * 0.25;
+    const q2 = min + diff * 0.5;
+    const q3 = min + diff * 0.75;
+    
+    currentMetricThresholds = [
+      Math.ceil(q1),
+      Math.ceil(q2),
+      Math.ceil(q3),
+      max
+    ];
+  }
+}
+
+function renderMapLegend() {
+  const legendContainer = document.getElementById('mapLegend');
+  if (!legendContainer) return;
+  
+  const metricTitles = {
+    'schools': "New Schools Built",
+    'girls_schools': "Girls' Schools Built",
+    'classrooms': "Classrooms Built",
+    'dormitories': "Dormitories Built",
+    'teachers_trained': "Teachers Trained",
+    'textbooks_distributed': "Textbooks Distributed"
+  };
+  
+  const title = metricTitles[activeMapMetric] || "Project Metric";
+  
+  let rangesHtml = `
+    <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">${title}</div>
+  `;
+  
+  const style = getComputedStyle(document.documentElement);
+  let val1 = style.getPropertyValue('--choropleth-level-1').trim() || 'rgba(0, 230, 118, 0.15)';
+  let val2 = style.getPropertyValue('--choropleth-level-2').trim() || 'rgba(0, 230, 118, 0.35)';
+  let val3 = style.getPropertyValue('--choropleth-level-3').trim() || 'rgba(0, 230, 118, 0.65)';
+  let val4 = style.getPropertyValue('--choropleth-level-4').trim() || 'rgba(0, 230, 118, 0.95)';
+  
+  const colors = [val1, val2, val3, val4];
+  
+  function formatLegendNumber(num) {
+    if (num >= 1e6) return (num / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (num >= 1e3) return (num / 1e3).toFixed(0) + 'k';
+    return num;
+  }
+  
+  for (let i = 0; i < 4; i++) {
+    let rangeText = "";
+    if (i === 0) {
+      rangeText = `1 - ${formatLegendNumber(currentMetricThresholds[0])}`;
+    } else if (i < 3) {
+      const lower = currentMetricThresholds[i - 1] + 1;
+      const upper = currentMetricThresholds[i];
+      if (lower > upper) {
+        rangeText = `${formatLegendNumber(upper)}`;
+      } else {
+        rangeText = `${formatLegendNumber(lower)} - ${formatLegendNumber(upper)}`;
+      }
+    } else {
+      const lower = currentMetricThresholds[2] + 1;
+      rangeText = `${formatLegendNumber(lower)}+`;
+    }
+    
+    rangesHtml += `
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="width: 12px; height: 12px; background: ${colors[i]}; border-radius: 2px; border: 1px solid var(--border-card);"></div>
+        <span style="font-size: 0.7rem; color: var(--text-secondary);">${rangeText}</span>
+      </div>
+    `;
+  }
+  
+  legendContainer.innerHTML = rangesHtml;
+}
+
 function getChoroplethColor(count) {
   const style = getComputedStyle(document.documentElement);
   if (count === 0) return 'rgba(0, 0, 0, 0.05)';
@@ -982,9 +1093,9 @@ function getChoroplethColor(count) {
   let val3 = style.getPropertyValue('--choropleth-level-3').trim() || 'rgba(0, 230, 118, 0.65)';
   let val4 = style.getPropertyValue('--choropleth-level-4').trim() || 'rgba(0, 230, 118, 0.95)';
   
-  if (count <= 20) return val1;
-  if (count <= 30) return val2;
-  if (count <= 40) return val3;
+  if (count <= currentMetricThresholds[0]) return val1;
+  if (count <= currentMetricThresholds[1]) return val2;
+  if (count <= currentMetricThresholds[2]) return val3;
   return val4;
 }
 
@@ -999,8 +1110,7 @@ function renderMapLayers() {
   geoJsonLayer = L.geoJSON(regionsGeoJSON, {
     style: function(feature) {
       const regionName = normalizeRegionName(feature.properties.region);
-      const regData = SEQUIP_DATA.regional[regionName] || { schools: 0 };
-      const count = regData.schools;
+      const count = getMetricValue(regionName, activeMapMetric);
       
       const isSelectedRegion = regionName.toUpperCase() === normalizeRegionName(activeRegion).toUpperCase();
       
@@ -1016,16 +1126,42 @@ function renderMapLayers() {
       const properties = feature.properties;
       const regionName = normalizeRegionName(properties.region);
       const regData = SEQUIP_DATA.regional[regionName] || { schools: 0, teachers_trained: 0, textbooks_distributed: 0, girls_science_schools: 0 };
-      const infra = regionalClassroomsAndDorms[regionName] || { classrooms: 0, dormitories: 0 };
+      const infra = regionalClassroomsAndDorms[regionName] || { classrooms: 0, dormitories: 0, girlsSchools: 0 };
+      
+      const isSchools = activeMapMetric === 'schools';
+      const isClassrooms = activeMapMetric === 'classrooms';
+      const isDorms = activeMapMetric === 'dormitories';
+      const isTeachers = activeMapMetric === 'teachers_trained';
+      const isTextbooks = activeMapMetric === 'textbooks_distributed';
+      const isGirls = activeMapMetric === 'girls_schools';
       
       const tooltipContent = `
         <div class="map-tooltip-popup">
           <h4 style="font-family: var(--font-title); font-size: 0.85rem; font-weight: 700; color: var(--accent-green); margin-bottom: 6px; border-bottom: 1px solid var(--border-card); padding-bottom: 4px;">${regionName} Region</h4>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">New Schools:</span><span style="font-weight:600; color: var(--text-primary);">${regData.schools}</span></div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">Classrooms:</span><span style="font-weight:600; color: var(--text-primary);">${infra.classrooms.toLocaleString()}</span></div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">Dormitories:</span><span style="font-weight:600; color: var(--text-primary);">${infra.dormitories.toLocaleString()}</span></div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">Teachers Trained:</span><span style="font-weight:600; color: var(--text-primary);">${regData.teachers_trained.toLocaleString()}</span></div>
-          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">Textbooks:</span><span style="font-weight:600; color: var(--text-primary);">${regData.textbooks_distributed.toLocaleString()}</span></div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isSchools ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
+            <span style="${isSchools ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">New Schools:</span>
+            <span style="${isSchools ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${regData.schools}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isGirls ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
+            <span style="${isGirls ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Girls' Schools:</span>
+            <span style="${isGirls ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(infra.girlsSchools || regData.girls_science_schools || 0)}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isClassrooms ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
+            <span style="${isClassrooms ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Classrooms:</span>
+            <span style="${isClassrooms ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(infra.classrooms || 0).toLocaleString()}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isDorms ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
+            <span style="${isDorms ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Dormitories:</span>
+            <span style="${isDorms ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(infra.dormitories || 0).toLocaleString()}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isTeachers ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
+            <span style="${isTeachers ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Teachers Trained:</span>
+            <span style="${isTeachers ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(regData.teachers_trained || 0).toLocaleString()}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px; ${isTextbooks ? 'font-weight: 700; color: var(--accent-gold);' : ''}">
+            <span style="${isTextbooks ? 'color: var(--accent-gold);' : 'color: var(--text-secondary);'}">Textbooks:</span>
+            <span style="${isTextbooks ? 'color: var(--accent-gold);' : 'color: var(--text-primary);'}">${(regData.textbooks_distributed || 0).toLocaleString()}</span>
+          </div>
           ${regData.girls_science_schools > 0 ? `<div style="margin-top: 6px; color: var(--accent-green); font-weight: 700;">★ ${regData.girls_science_schools} Girls' School(s) Built</div>` : ''}
         </div>
       `;
@@ -1068,7 +1204,6 @@ function renderMapLayers() {
     }
   }).addTo(leafMap);
   
-  // Re-render points layer if needed
   if (activeMapLayer === 'points') {
     girlsSchoolsLayerGroup.addTo(leafMap);
     renderGirlsSchoolsPoints();
@@ -1121,8 +1256,18 @@ function setupLayerToggle() {
   const btnChoropleth = document.getElementById('btnChoropleth');
   const btnPoints = document.getElementById('btnPoints');
   const legend = document.querySelector('.map-choropleth-legend');
+  const metricSelector = document.getElementById('mapMetricSelector');
   
   if (!btnChoropleth || !btnPoints) return;
+  
+  if (metricSelector) {
+    metricSelector.addEventListener('change', (e) => {
+      activeMapMetric = e.target.value;
+      calculateMetricThresholds();
+      renderMapLegend();
+      renderMapLayers();
+    });
+  }
   
   btnChoropleth.addEventListener('click', () => {
     activeMapLayer = 'choropleth';
@@ -1135,6 +1280,9 @@ function setupLayerToggle() {
     btnPoints.style.color = 'var(--text-secondary)';
     
     legend.style.display = 'flex';
+    if (metricSelector) {
+      metricSelector.style.display = 'inline-block';
+    }
     
     renderMapLayers();
   });
@@ -1150,6 +1298,9 @@ function setupLayerToggle() {
     btnChoropleth.style.color = 'var(--text-secondary)';
     
     legend.style.display = 'none';
+    if (metricSelector) {
+      metricSelector.style.display = 'none';
+    }
     
     renderMapLayers();
   });
