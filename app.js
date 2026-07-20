@@ -135,12 +135,20 @@ function initLayoutSwitcher() {
     homeView.style.display = 'none';
     aboutView.style.display = 'none';
     
-    // Trigger map load adjustments and fit bounds to all 26 Tanzania regions
     renderRegionDetails(activeRegion);
-    if (leafMap && geoJsonLayer) {
+    
+    if (leafMap) {
+      leafMap.invalidateSize();
       setTimeout(() => {
         leafMap.invalidateSize();
-        leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+        if (geoJsonLayer && typeof geoJsonLayer.getBounds === 'function' && geoJsonLayer.getBounds().isValid()) {
+          leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+        } else {
+          leafMap.setView([-6.369, 34.888], 6);
+        }
+      }, 100);
+    }
+  });
       }, 50);
     }
   });
@@ -226,6 +234,13 @@ function initMapInteractions() {
 
       // Select default active region (Dodoma) on map visually
       selectRegion(activeRegion, false);
+
+      if (leafMap) {
+        leafMap.invalidateSize();
+        if (geoJsonLayer && typeof geoJsonLayer.getBounds === 'function' && geoJsonLayer.getBounds().isValid()) {
+          leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+        }
+      }
     })
     .catch(err => {
       console.error("GIS Map Loading Error:", err);
