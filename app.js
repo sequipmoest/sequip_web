@@ -866,11 +866,28 @@ function renderMapLayers() {
     },
     onEachFeature: function(feature, layer) {
       const properties = feature.properties;
-      const regionName = properties.region;
+      const regionName = normalizeRegionName(properties.region);
       const regData = SEQUIP_DATA.regional[regionName] || { schools: 0, teachers_trained: 0, textbooks_distributed: 0, girls_science_schools: 0 };
       const infra = regionalClassroomsAndDorms[regionName] || { classrooms: 0, dormitories: 0 };
       
-      // Bind hover events
+      const tooltipContent = `
+        <div class="map-tooltip-popup">
+          <h4 style="font-family: var(--font-title); font-size: 0.85rem; font-weight: 700; color: var(--accent-green); margin-bottom: 6px; border-bottom: 1px solid var(--border-card); padding-bottom: 4px;">${regionName} Region</h4>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">New Schools:</span><span style="font-weight:600; color: var(--text-primary);">${regData.schools}</span></div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">Classrooms:</span><span style="font-weight:600; color: var(--text-primary);">${infra.classrooms.toLocaleString()}</span></div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">Dormitories:</span><span style="font-weight:600; color: var(--text-primary);">${infra.dormitories.toLocaleString()}</span></div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">Teachers Trained:</span><span style="font-weight:600; color: var(--text-primary);">${regData.teachers_trained.toLocaleString()}</span></div>
+          <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:3px;"><span style="color: var(--text-secondary);">Textbooks:</span><span style="font-weight:600; color: var(--text-primary);">${regData.textbooks_distributed.toLocaleString()}</span></div>
+          ${regData.girls_science_schools > 0 ? `<div style="margin-top: 6px; color: var(--accent-green); font-weight: 700;">★ ${regData.girls_science_schools} Girls' School(s) Built</div>` : ''}
+        </div>
+      `;
+
+      layer.bindTooltip(tooltipContent, {
+        sticky: true,
+        direction: 'auto',
+        className: 'leaflet-custom-tooltip'
+      });
+
       layer.on({
         mouseover: function(e) {
           const l = e.target;
@@ -884,33 +901,10 @@ function renderMapLayers() {
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             l.bringToFront();
           }
-          
-          // Update and show floating tooltip
-          const tooltip = document.getElementById('mapTooltip');
-          tooltip.innerHTML = `
-            <h4>${regionName} Region</h4>
-            <div class="tooltip-row"><span class="tooltip-label">New Schools:</span><span class="tooltip-val">${regData.schools}</span></div>
-            <div class="tooltip-row"><span class="tooltip-label">Classrooms:</span><span class="tooltip-val">${infra.classrooms.toLocaleString()}</span></div>
-            <div class="tooltip-row"><span class="tooltip-label">Dormitories:</span><span class="tooltip-val">${infra.dormitories.toLocaleString()}</span></div>
-            <div class="tooltip-row"><span class="tooltip-label">Teachers Trained:</span><span class="tooltip-val">${regData.teachers_trained.toLocaleString()}</span></div>
-            <div class="tooltip-row"><span class="tooltip-label">Textbooks:</span><span class="tooltip-val">${regData.textbooks_distributed.toLocaleString()}</span></div>
-            ${regData.girls_science_schools > 0 ? `<div style="margin-top: 6px; color: var(--accent-green); font-weight: 700;">★ ${regData.girls_science_schools} Girls' School(s) Built</div>` : ''}
-          `;
-          tooltip.style.display = 'block';
-        },
-        mousemove: function(e) {
-          const tooltip = document.getElementById('mapTooltip');
-          const mapContainerRect = document.querySelector('.map-container').getBoundingClientRect();
-          const x = e.originalEvent.clientX - mapContainerRect.left + 15;
-          const y = e.originalEvent.clientY - mapContainerRect.top + 15;
-          tooltip.style.left = `${x}px`;
-          tooltip.style.top = `${y}px`;
         },
         mouseout: function(e) {
           geoJsonLayer.resetStyle(e.target);
-          
-          // Restore selected region styles
-          const isSelected = regionName.toUpperCase() === activeRegion.toUpperCase();
+          const isSelected = regionName.toUpperCase() === normalizeRegionName(activeRegion).toUpperCase();
           if (isSelected) {
             e.target.setStyle({
               weight: 3,
@@ -918,9 +912,6 @@ function renderMapLayers() {
               opacity: 1
             });
           }
-          
-          const tooltip = document.getElementById('mapTooltip');
-          tooltip.style.display = 'none';
         },
         click: function(e) {
           selectRegion(regionName, true);
