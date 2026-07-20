@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SEQUIP Dashboard — United Republic of Tanzania</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 </head>
+
 <body>
   <div class="app-container">
-    
-        <!-- National Colors Accent Stripe (Green, Gold, Black, Blue) -->
+
+    <!-- National Colors Accent Stripe (Green, Gold, Black, Blue) -->
     <div class="national-stripe-bar">
       <div class="stripe green"></div>
       <div class="stripe gold"></div>
       <div class="stripe black"></div>
       <div class="stripe blue"></div>
     </div>
-    
+
     <!-- Official Ministry Header -->
     <header class="app-header">
       <div class="brand">
@@ -30,39 +33,59 @@
           <h1 class="project-app-title">Secondary Education Quality Improvement Project (SEQUIP)</h1>
         </div>
       </div>
-      
+
       <div class="header-controls">
         <div class="layout-switcher">
           <button id="btnHomeLayout" class="switch-btn active">
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+              <rect x="3" y="3" width="7" height="9"></rect>
+              <rect x="14" y="3" width="7" height="5"></rect>
+              <rect x="14" y="12" width="7" height="9"></rect>
+              <rect x="3" y="16" width="7" height="5"></rect>
+            </svg>
             Home
           </button>
           <button id="btnMapLayout" class="switch-btn">
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+              <line x1="8" y1="2" x2="8" y2="18"></line>
+              <line x1="16" y1="6" x2="16" y2="22"></line>
+            </svg>
             Maps
           </button>
           <button id="btnAboutLayout" class="switch-btn">
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
             About
           </button>
         </div>
-        
+
         <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Light/Dark Theme">
-          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
         </button>
       </div>
     </header>
-    
+
     <!-- View 3: Project Background & Context (About Page) -->
-        <!-- View 3: Project Overview & About (Official MoEST Structure) -->
+    <!-- View 3: Project Overview & About (Official MoEST Structure) -->
     <div id="aboutView" class="about-view-container" style="display: none;">
-      
+
       <!-- Hero About Banner -->
       <div class="card about-hero-banner">
         <div class="about-banner-badge">Official Government Project Factsheet</div>
         <h2 class="about-hero-title">Secondary Education Quality Improvement Project (SEQUIP)</h2>
         <p class="about-hero-lead">
-          SEQUIP is a US$ 535 Million landmark investment implemented by the <strong>Ministry of Education, Science and Technology (MoEST)</strong> in partnership with the <strong>President's Office – Regional Administration and Local Government (PO-RALG)</strong>, funded by the World Bank. The project aims to increase access to secondary education, create safe learning environments for girls, and improve completion rates of quality secondary education across mainland Tanzania.
+          SEQUIP is a US$ 535 Million landmark investment implemented by the <strong>Ministry of Education, Science and
+            Technology (MoEST)</strong> in partnership with the <strong>Prime Minister's Office – Regional
+            Administration and Local Government (PMO-RALG)</strong>, funded by the World Bank. The project aims to
+          increase access to secondary education, create safe learning environments for girls, and improve completion
+          rates of quality secondary education across mainland Tanzania.
         </p>
       </div>
 
@@ -70,7 +93,10 @@
       <div class="card about-section-card">
         <div class="card-header-bar">
           <h2 class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v8M8 12h8"></path>
+            </svg>
             Project Development Objective (PDO)
           </h2>
         </div>
@@ -78,17 +104,20 @@
           <div class="pdo-box">
             <div class="pdo-icon">🎯</div>
             <h3>Expand Access</h3>
-            <p>Constructing over 800 new secondary schools to reduce travel distance for rural students in underserved communities.</p>
+            <p>Constructing over 800 new secondary schools to reduce travel distance for rural students in underserved
+              communities.</p>
           </div>
           <div class="pdo-box">
             <div class="pdo-icon">👩‍🎓</div>
             <h3>Empower Girls</h3>
-            <p>Creating safe, gender-sensitive school environments and Alternative Education Pathways (AEP) for young mothers.</p>
+            <p>Creating safe, gender-sensitive school environments and Alternative Education Pathways (AEP) for young
+              mothers.</p>
           </div>
           <div class="pdo-box">
             <div class="pdo-icon">💻</div>
             <h3>Quality & ICT</h3>
-            <p>Equipping schools with modern ICT labs, smartboards, science facilities, and training 41,000+ STEM teachers.</p>
+            <p>Equipping schools with modern ICT labs, smartboards, science facilities, and training 41,000+ STEM
+              teachers.</p>
           </div>
         </div>
       </div>
@@ -97,38 +126,51 @@
       <div class="card about-section-card">
         <div class="card-header-bar">
           <h2 class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
             Core Project Components
           </h2>
         </div>
-        
+
         <div class="components-grid">
           <!-- Component 1 -->
           <div class="component-card">
             <div class="comp-badge badge-green">Component 1</div>
             <h3>Empowering Girls Through Secondary Education</h3>
-            <p>Focuses on creating safe learning environments for girls in secondary schools, providing school-based guidance and counseling, life skills training, and establishing <strong>Alternative Education Pathways (AEP)</strong> allowing out-of-school girls and young mothers to complete secondary education and sit for national exams.</p>
+            <p>Focuses on creating safe learning environments for girls in secondary schools, providing school-based
+              guidance and counseling, life skills training, and establishing <strong>Alternative Education Pathways
+                (AEP)</strong> allowing out-of-school girls and young mothers to complete secondary education and sit
+              for national exams.</p>
           </div>
 
           <!-- Component 2 -->
           <div class="component-card">
             <div class="comp-badge badge-blue">Component 2</div>
             <h3>Digitally Enabled Secondary Education & STEM Pedagogy</h3>
-            <p>Enhances learning outcomes through digital technology integration and teacher professional development. Includes installing 1,800+ computers, smartboards, projectors, fully equipped science laboratories, and training over 41,000 teachers in modern digital pedagogy and core STEM subjects.</p>
+            <p>Enhances learning outcomes through digital technology integration and teacher professional development.
+              Includes installing 1,800+ computers, smartboards, projectors, fully equipped science laboratories, and
+              training over 41,000 teachers in modern digital pedagogy and core STEM subjects.</p>
           </div>
 
           <!-- Component 3 -->
           <div class="component-card">
             <div class="comp-badge badge-gold">Component 3</div>
             <h3>Reducing Barriers to Secondary Education (Infrastructure)</h3>
-            <p>Finances physical infrastructure expansion to address overcrowding and long distances to school. Key targets include building 798+ New Ward Secondary Schools, 26 Specialized Regional Girls' Science Boarding Schools, dormitories, administration blocks, and over 3,100 pit latrines.</p>
+            <p>Finances physical infrastructure expansion to address overcrowding and long distances to school. Key
+              targets include building 798+ New Ward Secondary Schools, 26 Specialized Regional Girls' Science Boarding
+              Schools, dormitories, administration blocks, and over 3,100 pit latrines.</p>
           </div>
 
           <!-- Component 4 -->
           <div class="component-card">
             <div class="comp-badge badge-purple">Component 4</div>
             <h3>Project Management, Monitoring & Evaluation</h3>
-            <p>Supports project management, technical assistance, institutional capacity strengthening for MoEST and PO-RALG, and rigorous M&E tracking. Operates under an Investment Project Financing (IPF) model with 12 Performance-Based Conditions (PBCs) linked to disbursement.</p>
+            <p>Supports project management, technical assistance, institutional capacity strengthening for MoEST and
+              PO-RALG, and rigorous M&E tracking. Operates under an Investment Project Financing (IPF) model with 12
+              Performance-Based Conditions (PBCs) linked to disbursement.</p>
           </div>
         </div>
       </div>
@@ -137,7 +179,12 @@
       <div class="card about-section-card">
         <div class="card-header-bar">
           <h2 class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
             Institutional Implementation Architecture
           </h2>
         </div>
@@ -147,60 +194,78 @@
               <span class="agency-tag">Lead Policy & Quality Agency</span>
               <h4>Ministry of Education, Science and Technology (MoEST)</h4>
             </div>
-            <p>Responsible for overall project coordination, curriculum development, teacher training standards, quality assurance, and national examinations oversight.</p>
+            <p>Responsible for overall project coordination, curriculum development, teacher training standards, quality
+              assurance, and national examinations oversight.</p>
           </div>
           <div class="agency-box">
             <div class="agency-header">
               <span class="agency-tag">Local Execution Agency</span>
-              <h4>President's Office – Regional Administration & Local Government (PO-RALG)</h4>
+              <h4>Prime Minister's Office – Regional Administration & Local Government (PMO-RALG)</h4>
             </div>
-            <p>Responsible for ground-level school construction, regional infrastructure supervision, council management, and school-level operational maintenance across 26 regions.</p>
+            <p>Responsible for ground-level school construction, regional infrastructure supervision, council
+              management, and school-level operational maintenance across 26 regions.</p>
           </div>
         </div>
       </div>
     </div>
 
-<!-- View 1: Executive Dashboard (Hero Metric Grid) -->
+    <!-- View 1: Executive Dashboard (Hero Metric Grid) -->
     <div id="heroView" class="hero-view-container">
       <!-- Global Executive Project Summary (occupies full width) -->
       <div class="card global-summary-card">
-      <div class="card-header-bar">
-        <h2 class="card-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-          Executive Project Summary
-        </h2>
-        <div class="compare-box" style="pointer-events: none;">
-          <span style="font-size:0.75rem; color:var(--accent-green); background:rgba(0, 230, 118, 0.1); padding:2px 8px; border-radius:10px;">Official Factsheet</span>
+        <div class="card-header-bar">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Executive Project Summary
+          </h2>
+          <div class="compare-box" style="pointer-events: none;">
+            <span
+              style="font-size:0.75rem; color:var(--accent-green); background:rgba(0, 230, 118, 0.1); padding:2px 8px; border-radius:10px;">Official
+              Factsheet</span>
+          </div>
         </div>
-      </div>
-      <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem;">
-        The <strong>Secondary Education Quality Improvement Project (SEQUIP)</strong> is a landmark <strong>US$535 million</strong> initiative funded by the International Development Association (IDA) of the World Bank. Implementing agencies <strong>Ministry of Education, Science and Technology (MoEST)</strong> and the <strong>Prime Minister's Office – Regional Administration and Local Government (PMO-RALG)</strong> work in tandem to transform the teaching and learning environment in Tanzanian public secondary schools. The project's developmental objective focuses on expanding access to secondary education, facilitating safe and responsive learning environments for girls, and improving overall completion rates of quality secondary education for girls and boys across all regions of mainland Tanzania.
-      </div>
-      <div class="summary-grid">
-        <div class="summary-item">
-          <div class="summary-item-label">Project Budget</div>
-          <div class="summary-item-value" style="color: var(--accent-red);">US$535 Million</div>
-          <div class="summary-item-value" style="color: var(--accent-red);">US$500M Original + US$35M Additional</div>
+        <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem;">
+          The <strong>Secondary Education Quality Improvement Project (SEQUIP)</strong> is a landmark <strong>US$535
+            million</strong> initiative funded by the International Development Association (IDA) of the World Bank.
+          Implementing agencies <strong>Ministry of Education, Science and Technology (MoEST)</strong> and the
+          <strong>Prime Minister's Office – Regional Administration and Local Government (PMO-RALG)</strong> work in
+          tandem to transform the teaching and learning environment in Tanzanian public secondary schools. The project's
+          developmental objective focuses on expanding access to secondary education, facilitating safe and responsive
+          learning environments for girls, and improving overall completion rates of quality secondary education for
+          girls and boys across all regions of mainland Tanzania.
+        </div>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-item-label">Project Budget</div>
+            <div class="summary-item-value" style="color: var(--accent-red);">US$535 Million</div>
+            <div class="summary-item-value" style="color: var(--accent-red);">US$500M Original + US$35M Additional</div>
 
-        </div>
-        <div class="summary-item">
-          <div class="summary-item-label">Project Timeframe</div>
-          <div class="summary-item-value" style="color: var(--accent-orange);">November 2021 – July 2026</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-item-label">Financing Model</div>
-          <div class="summary-item-value" style="color: var(--accent-blue);">IPF with Performance-Based Conditions</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-item-label">Lead Implementing Agencies</div>
-          <div class="summary-item-value">MoEST & PMO-RALG</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-item-label">Target Beneficiaries</div>
-          <div class="summary-item-value" style="color: var(--accent-green);">~6M Secondary Students (Mainland)</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item-label">Project Timeframe</div>
+            <div class="summary-item-value" style="color: var(--accent-orange);">November 2021 – July 2026</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item-label">Financing Model</div>
+            <div class="summary-item-value" style="color: var(--accent-blue);">IPF with Performance-Based Conditions
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item-label">Lead Implementing Agencies</div>
+            <div class="summary-item-value">MoEST & PMO-RALG</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item-label">Target Beneficiaries</div>
+            <div class="summary-item-value" style="color: var(--accent-green);">~6M Secondary Students (Mainland)</div>
+          </div>
         </div>
       </div>
-    </div>
       <!-- Top Massive KPI Grid -->
       <section class="hero-metrics-grid">
         <!-- KPI 1: Financial Scope -->
@@ -211,10 +276,14 @@
             <div class="kpi-subtext">772,478,159,166 TZS Capital Outlay</div>
           </div>
           <div class="kpi-icon-wrapper">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
           </div>
         </div>
-        
+
         <!-- KPI 2: Infrastructure Units -->
         <div class="card hero-kpi-card kpi-teachers">
           <div class="kpi-info">
@@ -223,10 +292,14 @@
             <div class="kpi-subtext">Total Physical Assets Constructed</div>
           </div>
           <div class="kpi-icon-wrapper">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
           </div>
         </div>
-        
+
         <!-- KPI 3: New Schools -->
         <div class="card hero-kpi-card kpi-textbooks">
           <div class="kpi-info">
@@ -235,10 +308,14 @@
             <div class="kpi-subtext">Expanding Secondary Access Nationwide</div>
           </div>
           <div class="kpi-icon-wrapper">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
+            </svg>
           </div>
         </div>
-        
+
         <!-- KPI 4: Specialized Girls' Schools -->
         <div class="card hero-kpi-card kpi-enrolment">
           <div class="kpi-info">
@@ -247,19 +324,28 @@
             <div class="kpi-subtext">Specialized Science Facilities Built</div>
           </div>
           <div class="kpi-icon-wrapper">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#e040fb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e040fb" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
           </div>
         </div>
       </section>
-      
+
       <!-- Detail Cards Grid -->
       <div class="detail-grid">
-        
+
         <!-- Card 5: Infrastructure details -->
         <div class="card detail-card-large">
           <div class="card-header-bar">
             <h2 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
               Infrastructure Transformation
             </h2>
             <div class="kpi-subtext">November 2021 – July 2026 Timeframe</div>
@@ -268,31 +354,37 @@
             <div class="stat-item schools-stat">
               <div id="statSchools" class="stat-num">830</div>
               <div class="stat-label">New School Buildings Built</div>
-              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">694 Ward, 26 Girls Sci, 29 Voc, 7 Boys</div>
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">694 Ward, 26 Girls Sci, 29 Voc, 7
+                Boys</div>
             </div>
             <div class="stat-item classrooms-stat">
               <div id="statClassrooms" class="stat-num">1,499</div>
               <div class="stat-label">Classrooms (Built & Upgraded)</div>
-              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">630 Constructed / 869 Upgraded</div>
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">630 Constructed / 869 Upgraded
+              </div>
             </div>
             <div class="stat-item labs-stat">
               <div id="statLabs" class="stat-num">132</div>
               <div class="stat-label">Specialized Science Labs</div>
-              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">Constructed and Fully Equipped</div>
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">Constructed and Fully Equipped
+              </div>
             </div>
             <div class="stat-item latrines-stat">
               <div id="statLatrines" class="stat-num">3,186</div>
               <div class="stat-label">Constructed Pit Latrines</div>
-              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">Plus 1,650 completions achieved</div>
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">Plus 1,650 completions achieved
+              </div>
             </div>
           </div>
         </div>
-        
+
         <!-- Card 6: Safe Schools details -->
         <div class="card detail-card-small">
           <div class="card-header-bar">
             <h2 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
               Safe Schools Program
             </h2>
           </div>
@@ -308,16 +400,23 @@
               </div>
             </div>
             <div style="font-size: 0.85rem; color: var(--text-secondary);">
-              Extended to additional <strong>4,228 schools</strong> and <strong>12,684 teachers</strong> through local council initiatives. Guidelines distributed: Circular No. 4 (Safe Environments), Parent-Teacher Partnership, Peer Education, and School Feeding.
+              Extended to additional <strong>4,228 schools</strong> and <strong>12,684 teachers</strong> through local
+              council initiatives. Guidelines distributed: Circular No. 4 (Safe Environments), Parent-Teacher
+              Partnership, Peer Education, and School Feeding.
             </div>
           </div>
         </div>
-        
+
         <!-- Card 7: AEP Re-entry -->
         <div class="card detail-card-small">
           <div class="card-header-bar">
             <h2 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <line x1="19" y1="8" x2="19" y2="14"></line>
+                <line x1="22" y1="11" x2="16" y2="11"></line>
+              </svg>
               Alternative Pathway (AEP)
             </h2>
           </div>
@@ -332,21 +431,28 @@
                 <div class="pill-card-lbl">Returned to School</div>
               </div>
             </div>
-            <div style="font-size: 0.85rem; color: var(--text-secondary); border-top: 1px solid var(--border-card); padding-top: 10px;">
-              A re-entry program for girls who dropped out (pregnancy, illness). <strong>831 students</strong> successfully passed Form Four exams and qualified for higher levels.
+            <div
+              style="font-size: 0.85rem; color: var(--text-secondary); border-top: 1px solid var(--border-card); padding-top: 10px;">
+              A re-entry program for girls who dropped out (pregnancy, illness). <strong>831 students</strong>
+              successfully passed Form Four exams and qualified for higher levels.
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:var(--text-muted);">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:var(--text-muted);">
               <span>Centers: <strong>191 Centres</strong></span>
               <span id="statAepPassed">Target by 2025: Completed</span>
             </div>
           </div>
         </div>
-        
+
         <!-- Card 8: ICT & Digital Learning -->
         <div class="card detail-card-small">
           <div class="card-header-bar">
             <h2 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
               ICT & Digital Learning
             </h2>
           </div>
@@ -362,20 +468,27 @@
               </div>
             </div>
             <div style="font-size: 0.85rem; color: var(--text-secondary);">
-              Supplied 231 laptops, 231 projectors, 462 UPS units, and trained <strong>4,987 secondary teachers</strong> in digital instruction.
+              Supplied 231 laptops, 231 projectors, 462 UPS units, and trained <strong>4,987 secondary teachers</strong>
+              in digital instruction.
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:var(--text-muted); border-top: 1px solid var(--border-card); padding-top: 8px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:var(--text-muted); border-top: 1px solid var(--border-card); padding-top: 8px;">
               <span>Smartboard Schools:</span>
               <span><strong id="statIctSmart">422</strong> Schools</span>
             </div>
           </div>
         </div>
-        
+
         <!-- Card 9: NECTA Form Two Gaps -->
         <div class="card detail-card-small">
           <div class="card-header-bar">
             <h2 class="card-title" style="color: var(--accent-red);">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                </path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
               NECTA Assessment Gaps
             </h2>
           </div>
@@ -436,12 +549,16 @@
             </div>
           </div>
         </div>
-        
+
         <!-- M&E Chart Card 1: Regional Distribution -->
         <div class="card detail-card-large">
           <div class="card-header-bar">
             <h2 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 5.25 10 12 10 12s10-6.75 10-12a10 10 0 0 0-10-10z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 2a10 10 0 0 0-10 10c0 5.25 10 12 10 12s10-6.75 10-12a10 10 0 0 0-10-10z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
               Regional Infrastructure Comparison
             </h2>
             <div class="kpi-subtext">Classrooms and Dormitories Volume by Region (Sorted Descending)</div>
@@ -455,15 +572,21 @@
         <div class="card detail-card-small">
           <div class="card-header-bar">
             <h2 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
               Budget Allocation (TZS)
             </h2>
             <div class="kpi-subtext">Capital Distribution of 772.48B TZS Outlay</div>
           </div>
-          <div class="chart-container" style="position: relative; height: 250px; width: 100%; display: flex; justify-content: center; align-items: center;">
+          <div class="chart-container"
+            style="position: relative; height: 250px; width: 100%; display: flex; justify-content: center; align-items: center;">
             <canvas id="budgetAllocationChart"></canvas>
           </div>
-          <div id="budgetChartTooltip" class="chart-details-box" style="margin-top: 10px; font-size: 0.8rem; text-align: center; color: var(--text-secondary); font-weight: 500;">
+          <div id="budgetChartTooltip" class="chart-details-box"
+            style="margin-top: 10px; font-size: 0.8rem; text-align: center; color: var(--text-secondary); font-weight: 500;">
             Hover over sections to see category details
           </div>
         </div>
@@ -472,7 +595,13 @@
         <div class="card detail-card-large">
           <div class="card-header-bar">
             <h2 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
               Infrastructure Volume (Built Assets)
             </h2>
             <div class="kpi-subtext">Scale of Physical Infrastructure Units Constructed</div>
@@ -486,107 +615,149 @@
         <div class="card detail-card-small">
           <div class="card-header-bar">
             <h2 class="card-title" style="color: var(--accent-green);">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 11.08 12 19 7.01 14.58"></polyline><path d="M22 4L12 14.01 9 11.01"></path></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="22 11.08 12 19 7.01 14.58"></polyline>
+                <path d="M22 4L12 14.01 9 11.01"></path>
+              </svg>
               SEQUIP Key Impacts
             </h2>
             <div class="kpi-subtext">Verified M&E Factual Statements</div>
           </div>
           <div class="impact-statements-container" style="display: flex; flex-direction: column; gap: 0.8rem;">
-            
-            <div class="impact-statement-card" style="background: rgba(0, 230, 118, 0.04); border-left: 3px solid var(--accent-green); padding: 8px 10px; border-radius: 6px;">
+
+            <div class="impact-statement-card"
+              style="background: rgba(0, 230, 118, 0.04); border-left: 3px solid var(--accent-green); padding: 8px 10px; border-radius: 6px;">
               <p style="font-size: 0.8rem; line-height: 1.35; color: var(--text-primary); font-weight: 500;">
-                <strong>Democratizing Education:</strong> Spread across <strong>all 26 regions</strong>, 798 new secondary schools have been constructed at the grassroots district level, bringing education closer to remote communities.
+                <strong>Democratizing Education:</strong> Spread across <strong>all 26 regions</strong>, 798 new
+                secondary schools have been constructed at the grassroots district level, bringing education closer to
+                remote communities.
               </p>
             </div>
-            
-            <div class="impact-statement-card" style="background: rgba(224, 64, 251, 0.04); border-left: 3px solid #e040fb; padding: 8px 10px; border-radius: 6px;">
+
+            <div class="impact-statement-card"
+              style="background: rgba(224, 64, 251, 0.04); border-left: 3px solid #e040fb; padding: 8px 10px; border-radius: 6px;">
               <p style="font-size: 0.8rem; line-height: 1.35; color: var(--text-primary); font-weight: 500;">
-                <strong>Fostering Gender Parity:</strong> Targeted placement of the <strong>26 specialized girls' secondary schools</strong> provides safe boarding environments, reducing travel risks and boosting retention.
+                <strong>Fostering Gender Parity:</strong> Targeted placement of the <strong>26 specialized girls'
+                  secondary schools</strong> provides safe boarding environments, reducing travel risks and boosting
+                retention.
               </p>
             </div>
-            
-            <div class="impact-statement-card" style="background: rgba(0, 229, 255, 0.04); border-left: 3px solid var(--accent-blue); padding: 8px 10px; border-radius: 6px;">
+
+            <div class="impact-statement-card"
+              style="background: rgba(0, 229, 255, 0.04); border-left: 3px solid var(--accent-blue); padding: 8px 10px; border-radius: 6px;">
               <p style="font-size: 0.8rem; line-height: 1.35; color: var(--text-primary); font-weight: 500;">
-                <strong>Infrastructure Hubs:</strong> Deployed <strong>1,484 classrooms</strong> and <strong>607 dormitories</strong>, with high-need regions like Dodoma and Mara leading the expansion of physical learning spaces.
+                <strong>Infrastructure Hubs:</strong> Deployed <strong>1,484 classrooms</strong> and <strong>607
+                  dormitories</strong>, with high-need regions like Dodoma and Mara leading the expansion of physical
+                learning spaces.
               </p>
             </div>
-            
-            <div class="impact-statement-card" style="background: rgba(255, 193, 7, 0.04); border-left: 3px solid var(--accent-gold); padding: 8px 10px; border-radius: 6px;">
+
+            <div class="impact-statement-card"
+              style="background: rgba(255, 193, 7, 0.04); border-left: 3px solid var(--accent-gold); padding: 8px 10px; border-radius: 6px;">
               <p style="font-size: 0.8rem; line-height: 1.35; color: var(--text-primary); font-weight: 500;">
-                <strong>Hygiene & STEM Readiness:</strong> Constructed <strong>4,858 toilet units</strong> and <strong>132 labs</strong>, establishing hygienic, STEM-equipped learning environments for enhanced outcomes.
+                <strong>Hygiene & STEM Readiness:</strong> Constructed <strong>4,858 toilet units</strong> and
+                <strong>132 labs</strong>, establishing hygienic, STEM-equipped learning environments for enhanced
+                outcomes.
               </p>
             </div>
 
           </div>
         </div>
-        
+
       </div>
     </div>
-    
+
     <!-- View 2: Geographical Map-Centric Layout -->
     <div id="mapView" class="map-view-container" style="display: none;">
-      
+
       <!-- Interactive Map Card -->
       <section class="card map-card">
         <div class="card-header-bar">
           <h2 class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+              <line x1="8" y1="2" x2="8" y2="18"></line>
+              <line x1="16" y1="6" x2="16" y2="22"></line>
+            </svg>
             Geographical Project Footprint
           </h2>
-          
+
           <!-- Search box -->
           <div class="search-container">
             <span class="search-icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
             </span>
-            <input id="regionSearchInput" class="search-input" type="text" placeholder="Search regions (e.g. Mwanza, Kagera, Dodoma)..." autocomplete="off">
+            <input id="regionSearchInput" class="search-input" type="text"
+              placeholder="Search regions (e.g. Mwanza, Kagera, Dodoma)..." autocomplete="off">
             <div id="searchSuggestions" class="search-suggestions"></div>
           </div>
         </div>
-        
+
         <!-- SVG Map of Tanzania -->
         <div class="map-container" style="position: relative; height: 750px; width: 100%;">
-          <div id="gisMap" style="height: 100%; min-height: 700px; width: 100%; border-radius: 8px; background: transparent; z-index: 1;"></div>
-          
+          <div id="gisMap"
+            style="height: 100%; min-height: 700px; width: 100%; border-radius: 8px; background: transparent; z-index: 1;">
+          </div>
+
           <!-- Custom Floating Layer Selector -->
-          <div class="map-layer-selector" style="position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; padding: 6px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-card); backdrop-filter: blur(10px); z-index: 1000;">
-            <button id="btnChoropleth" class="layer-selector-btn active" style="background: var(--accent-green); border: none; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
+          <div class="map-layer-selector"
+            style="position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; padding: 6px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-card); backdrop-filter: blur(10px); z-index: 1000;">
+            <button id="btnChoropleth" class="layer-selector-btn active"
+              style="background: var(--accent-green); border: none; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
               New Schools Density
             </button>
-            <button id="btnPoints" class="layer-selector-btn" style="background: transparent; border: none; color: var(--text-secondary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
+            <button id="btnPoints" class="layer-selector-btn"
+              style="background: transparent; border: none; color: var(--text-secondary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
               Girls' Schools
             </button>
-            <button id="btnResetView" class="layer-selector-btn" style="background: transparent; border: 1px solid var(--border-card); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
+            <button id="btnResetView" class="layer-selector-btn"
+              style="background: transparent; border: 1px solid var(--border-card); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: var(--transition);">
               🌍 All Regions
             </button>
           </div>
-          
+
           <!-- Floating Map Tooltip -->
-          <div id="mapTooltip" class="map-tooltip" style="position: absolute; display: none; background: var(--bg-secondary); border: 1px solid var(--border-card); padding: 10px; border-radius: 8px; font-size: 0.75rem; color: var(--text-primary); backdrop-filter: blur(8px); z-index: 1000; pointer-events: none; box-shadow: var(--shadow-md);"></div>
+          <div id="mapTooltip" class="map-tooltip"
+            style="position: absolute; display: none; background: var(--bg-secondary); border: 1px solid var(--border-card); padding: 10px; border-radius: 8px; font-size: 0.75rem; color: var(--text-primary); backdrop-filter: blur(8px); z-index: 1000; pointer-events: none; box-shadow: var(--shadow-md);">
+          </div>
 
           <!-- Choropleth Map Legend -->
-          <div class="map-choropleth-legend" style="position: absolute; bottom: 15px; left: 15px; display: flex; flex-direction: column; gap: 8px; padding: 12px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-card); backdrop-filter: blur(10px); z-index: 1000;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">New Schools Built</div>
+          <div class="map-choropleth-legend"
+            style="position: absolute; bottom: 15px; left: 15px; display: flex; flex-direction: column; gap: 8px; padding: 12px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-card); backdrop-filter: blur(10px); z-index: 1000;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">New
+              Schools Built</div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <div style="width: 12px; height: 12px; background: var(--choropleth-level-1); border-radius: 2px; border: 1px solid var(--border-card);"></div>
+              <div
+                style="width: 12px; height: 12px; background: var(--choropleth-level-1); border-radius: 2px; border: 1px solid var(--border-card);">
+              </div>
               <span style="font-size: 0.7rem; color: var(--text-secondary);">1 - 20 schools</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <div style="width: 12px; height: 12px; background: var(--choropleth-level-2); border-radius: 2px; border: 1px solid var(--border-card);"></div>
+              <div
+                style="width: 12px; height: 12px; background: var(--choropleth-level-2); border-radius: 2px; border: 1px solid var(--border-card);">
+              </div>
               <span style="font-size: 0.7rem; color: var(--text-secondary);">21 - 30 schools</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <div style="width: 12px; height: 12px; background: var(--choropleth-level-3); border-radius: 2px; border: 1px solid var(--border-card);"></div>
+              <div
+                style="width: 12px; height: 12px; background: var(--choropleth-level-3); border-radius: 2px; border: 1px solid var(--border-card);">
+              </div>
               <span style="font-size: 0.7rem; color: var(--text-secondary);">31 - 40 schools</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <div style="width: 12px; height: 12px; background: var(--choropleth-level-4); border-radius: 2px; border: 1px solid var(--border-card);"></div>
+              <div
+                style="width: 12px; height: 12px; background: var(--choropleth-level-4); border-radius: 2px; border: 1px solid var(--border-card);">
+              </div>
               <span style="font-size: 0.7rem; color: var(--text-secondary);">41+ schools</span>
             </div>
           </div>
         </div>
       </section>
-      
+
       <!-- Regional Statistics Sidebar -->
       <section class="card map-sidebar">
         <div class="region-details-card">
@@ -595,20 +766,21 @@
               <div id="selectedRegionName" class="region-name">Dodoma</div>
               <div id="regionZoneTag" class="region-geo-tag">Central/Western Zone</div>
             </div>
-            
+
             <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
               <label class="compare-box">
                 <input id="compareCheckbox" type="checkbox">
                 <span>Compare Mode</span>
               </label>
-              
+
               <div id="compareSelectContainer" style="display: none;">
-                <select id="compareRegionSelect" style="background: var(--bg-primary); border:1px solid var(--border-card); color:var(--text-primary); border-radius:4px; padding:2px 8px; font-size:0.8rem; font-family:var(--font-body); outline:none;">
+                <select id="compareRegionSelect"
+                  style="background: var(--bg-primary); border:1px solid var(--border-card); color:var(--text-primary); border-radius:4px; padding:2px 8px; font-size:0.8rem; font-family:var(--font-body); outline:none;">
                 </select>
               </div>
             </div>
           </div>
-          
+
           <!-- Standard stats grid -->
           <div id="regionalStatsGrid" class="regional-grid">
             <div class="regional-metric-card">
@@ -648,10 +820,10 @@
               <div class="regional-metric-lbl">Safe Schools Enrolled</div>
             </div>
           </div>
-          
+
           <!-- Side-by-side comparison tables -->
           <div id="comparisonView" class="comparison-container">
-            
+
             <div class="comparison-column">
               <div id="compHeaderMain" class="comparison-column-header">Dodoma</div>
               <div class="comparison-metric">
@@ -691,7 +863,7 @@
                 <span id="compMainSafe" class="comparison-val">130</span>
               </div>
             </div>
-            
+
             <div class="comparison-column">
               <div id="compHeaderComp" class="comparison-column-header">National Mean</div>
               <div class="comparison-metric">
@@ -731,149 +903,182 @@
                 <span id="compCompSafe" class="comparison-val">130</span>
               </div>
             </div>
-            
+
           </div>
         </div>
       </section>
-      
-    
+
+
       <!-- Performance-Based Conditions (PBC) Tracker Card -->
-<div class="card global-summary-card" style="grid-column: span 12;">
-      <div class="card-header-bar">
-        <h2 class="card-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          Performance-Based Conditions (PBCs) Achievement Tracker
-        </h2>
-        <div class="kpi-subtext" style="font-weight: 600; color: var(--accent-green); display: flex; align-items: center; gap: 4px;">
-          <span>Project Completion Status</span>
-          <span style="font-size:0.75rem; background:rgba(0,230,118,0.1); padding:2px 8px; border-radius:10px;">11 / 12 Met</span>
-        </div>
-      </div>
-      
-            <!-- Mini KPI Dashboard -->
-      <div class="mini-kpi-dashboard">
-        <div class="mini-kpi-item">
-          <div class="mini-kpi-value">12</div>
-          <div class="mini-kpi-label">Total PBCs</div>
-        </div>
-        <div class="mini-kpi-item" style="border-bottom: 3px solid var(--accent-green);">
-          <div class="mini-kpi-value" style="color: var(--accent-green);">11</div>
-          <div class="mini-kpi-label">PBCs Met</div>
-        </div>
-        <div class="mini-kpi-item" style="border-bottom: 3px solid var(--accent-gold);">
-          <div class="mini-kpi-value" style="color: var(--accent-gold);">1</div>
-          <div class="mini-kpi-label">In Progress</div>
-        </div>
-        <div class="mini-kpi-item" style="border-bottom: 3px solid var(--accent-red);">
-          <div class="mini-kpi-value" style="color: var(--accent-red);">0</div>
-          <div class="mini-kpi-label">Not Met</div>
-        </div>
-      </div>
-
-      <!-- Achievement Summary Cards -->
-      <div class="pbc-grid" style="grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));">
-        
-        <!-- Component 1 -->
-        <div class="pbc-component-card">
-          <div class="pbc-component-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: none;">
-            <div>
-              <span class="pbc-component-num">Component 1</span>
-              <h3>Empowering Girls</h3>
-            </div>
-            <!-- Circular Progress -->
-            <div class="circular-progress" style="--progress: 100%;">
-              <div class="circular-progress-value">100%</div>
-            </div>
-          </div>
-          <div class="pbc-items-list" style="margin-top: 10px;">
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 1: AEP Form 4</span><span>100% 🎉</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 2: AEP Form 5 Enrolment</span><span>100% 🤩</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 3: Safe School Program</span><span>100% 🏆</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 4: Female Enrolment</span><span>100% 🌟</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 5: Drop-out Tracking</span><span>100% 🙌</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
+      <div class="card global-summary-card" style="grid-column: span 12;">
+        <div class="card-header-bar">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Performance-Based Conditions (PBCs) Achievement Tracker
+          </h2>
+          <div class="kpi-subtext"
+            style="font-weight: 600; color: var(--accent-green); display: flex; align-items: center; gap: 4px;">
+            <span>Project Completion Status</span>
+            <span style="font-size:0.75rem; background:rgba(0,230,118,0.1); padding:2px 8px; border-radius:10px;">11 /
+              12 Met</span>
           </div>
         </div>
 
-        <!-- Component 2 -->
-        <div class="pbc-component-card">
-          <div class="pbc-component-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: none;">
-            <div>
-              <span class="pbc-component-num" style="background-color: var(--accent-green);">Component 2</span>
-              <h3>Digitally-Enabled Learning</h3>
-            </div>
-            <!-- Circular Progress -->
-            <div class="circular-progress" style="--progress: 100%;">
-              <div class="circular-progress-value">100%</div>
-            </div>
+        <!-- Mini KPI Dashboard -->
+        <div class="mini-kpi-dashboard">
+          <div class="mini-kpi-item">
+            <div class="mini-kpi-value">12</div>
+            <div class="mini-kpi-label">Total PBCs</div>
           </div>
-          <div class="pbc-items-list" style="margin-top: 10px;">
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 6: Teacher Training</span><span>100% 🎓</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 7: Teacher Deployment</span><span>100% 🚀</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 8: Material Standards</span><span>100% 🧪</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 9: ICT Package</span><span>100% 💻</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 10: Form 2 Evaluation</span><span>100% 📝</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
+          <div class="mini-kpi-item" style="border-bottom: 3px solid var(--accent-green);">
+            <div class="mini-kpi-value" style="color: var(--accent-green);">11</div>
+            <div class="mini-kpi-label">PBCs Met</div>
+          </div>
+          <div class="mini-kpi-item" style="border-bottom: 3px solid var(--accent-gold);">
+            <div class="mini-kpi-value" style="color: var(--accent-gold);">1</div>
+            <div class="mini-kpi-label">In Progress</div>
+          </div>
+          <div class="mini-kpi-item" style="border-bottom: 3px solid var(--accent-red);">
+            <div class="mini-kpi-value" style="color: var(--accent-red);">0</div>
+            <div class="mini-kpi-label">Not Met</div>
           </div>
         </div>
 
-        <!-- Component 3 -->
-        <div class="pbc-component-card">
-          <div class="pbc-component-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: none;">
-            <div>
-              <span class="pbc-component-num" style="background-color: var(--accent-gold);">Component 3</span>
-              <h3>Reducing Barriers (Access)</h3>
-            </div>
-            <!-- Circular Progress -->
-            <div class="circular-progress" style="--progress: 78%;">
-              <div class="circular-progress-value">78%</div>
-            </div>
-          </div>
-          <div class="pbc-items-list" style="margin-top: 10px;">
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 11: Infrastructure Standards</span><span>57% 🏗️</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill warning" style="width: 57%;"></div></div>
-            </div>
-            <div class="pbc-horizontal-bar-wrapper">
-              <div class="pbc-horizontal-bar-label"><span>PBC 12: Fund Releases</span><span>100% 💰</span></div>
-              <div class="pbc-horizontal-bar-track"><div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div></div>
-            </div>
-          </div>
-        </div>
+        <!-- Achievement Summary Cards -->
+        <div class="pbc-grid" style="grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));">
 
+          <!-- Component 1 -->
+          <div class="pbc-component-card">
+            <div class="pbc-component-header"
+              style="display: flex; justify-content: space-between; align-items: center; border-bottom: none;">
+              <div>
+                <span class="pbc-component-num">Component 1</span>
+                <h3>Empowering Girls</h3>
+              </div>
+              <!-- Circular Progress -->
+              <div class="circular-progress" style="--progress: 100%;">
+                <div class="circular-progress-value">100%</div>
+              </div>
+            </div>
+            <div class="pbc-items-list" style="margin-top: 10px;">
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 1: AEP Form 4</span><span>100% 🎉</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 2: AEP Form 5 Enrolment</span><span>100% 🤩</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 3: Safe School Program</span><span>100% 🏆</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 4: Female Enrolment</span><span>100% 🌟</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 5: Drop-out Tracking</span><span>100% 🙌</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Component 2 -->
+          <div class="pbc-component-card">
+            <div class="pbc-component-header"
+              style="display: flex; justify-content: space-between; align-items: center; border-bottom: none;">
+              <div>
+                <span class="pbc-component-num" style="background-color: var(--accent-green);">Component 2</span>
+                <h3>Digitally-Enabled Learning</h3>
+              </div>
+              <!-- Circular Progress -->
+              <div class="circular-progress" style="--progress: 100%;">
+                <div class="circular-progress-value">100%</div>
+              </div>
+            </div>
+            <div class="pbc-items-list" style="margin-top: 10px;">
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 6: Teacher Training</span><span>100% 🎓</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 7: Teacher Deployment</span><span>100% 🚀</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 8: Material Standards</span><span>100% 🧪</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 9: ICT Package</span><span>100% 💻</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 10: Form 2 Evaluation</span><span>100% 📝</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Component 3 -->
+          <div class="pbc-component-card">
+            <div class="pbc-component-header"
+              style="display: flex; justify-content: space-between; align-items: center; border-bottom: none;">
+              <div>
+                <span class="pbc-component-num" style="background-color: var(--accent-gold);">Component 3</span>
+                <h3>Reducing Barriers (Access)</h3>
+              </div>
+              <!-- Circular Progress -->
+              <div class="circular-progress" style="--progress: 78%;">
+                <div class="circular-progress-value">78%</div>
+              </div>
+            </div>
+            <div class="pbc-items-list" style="margin-top: 10px;">
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 11: Infrastructure Standards</span><span>57% 🏗️</span>
+                </div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill warning" style="width: 57%;"></div>
+                </div>
+              </div>
+              <div class="pbc-horizontal-bar-wrapper">
+                <div class="pbc-horizontal-bar-label"><span>PBC 12: Fund Releases</span><span>100% 💰</span></div>
+                <div class="pbc-horizontal-bar-track">
+                  <div class="pbc-horizontal-bar-fill success" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
-    </div>
-    
-      <!-- Official Ministry Footer -->
+
+    <!-- Official Ministry Footer -->
     <footer class="app-footer">
       <div class="footer-stripe">
         <div class="stripe green"></div>
@@ -891,7 +1096,8 @@
             </div>
           </div>
           <p class="footer-desc">
-            Secondary Education Quality Improvement Project (SEQUIP) Monitoring & Evaluation GIS Dashboard. Empowering secondary education transformation across Tanzania mainland.
+            Secondary Education Quality Improvement Project (SEQUIP) Monitoring & Evaluation GIS Dashboard. Empowering
+            secondary education transformation across Tanzania mainland.
           </p>
         </div>
 
@@ -899,15 +1105,25 @@
           <h4>Wasiliana Nasi (Contact Us)</h4>
           <ul class="contact-list">
             <li>
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
               <span>Katibu Mkuu, Mji wa Serikali Mtumba - Mtaa wa Afya, S.L.P 1040, 40479 Dodoma, Tanzania</span>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+              </svg>
               <span>+255 26 2963533 / +255 26 2963534</span>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
               <span>info@moe.go.tz / sequip@moe.go.tz</span>
             </li>
           </ul>
@@ -917,7 +1133,8 @@
           <h4>Viunganishi Maarufu (Popular Links)</h4>
           <ul class="footer-links">
             <li><a href="https://www.ikulu.go.tz" target="_blank" rel="noopener">Ikulu Tanzania (State House)</a></li>
-            <li><a href="https://www.tanzania.go.tz" target="_blank" rel="noopener">Tovuti Kuu ya Serikali (Government Portal)</a></li>
+            <li><a href="https://www.tanzania.go.tz" target="_blank" rel="noopener">Tovuti Kuu ya Serikali (Government
+                Portal)</a></li>
             <li><a href="https://www.moe.go.tz" target="_blank" rel="noopener">Wizara ya Elimu (MoEST Portal)</a></li>
             <li><a href="https://www.tamisemi.go.tz" target="_blank" rel="noopener">PO-RALG (TAMISEMI)</a></li>
             <li><a href="https://www.necta.go.tz" target="_blank" rel="noopener">Baraza la Mitihani (NECTA)</a></li>
@@ -926,7 +1143,8 @@
       </div>
 
       <div class="footer-bottom">
-        <div>&copy; 2026 Ministry of Education, Science and Technology (MoEST) &mdash; United Republic of Tanzania. All Rights Reserved.</div>
+        <div>&copy; 2026 Ministry of Education, Science and Technology (MoEST) &mdash; United Republic of Tanzania. All
+          Rights Reserved.</div>
       </div>
     </footer>
 
@@ -935,10 +1153,12 @@
   <!-- Chart.js for interactive pie/doughnut/bar charts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Leaflet GIS Map Library -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <!-- Load Datasets -->
   <script src="data.js"></script>
   <!-- Load App scripts -->
   <script src="app.js"></script>
 </body>
+
 </html>
