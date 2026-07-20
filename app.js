@@ -138,13 +138,22 @@ function initLayoutSwitcher() {
     renderRegionDetails(activeRegion);
     
     if (leafMap) {
-      leafMap.invalidateSize({ pan: false });
-      setTimeout(() => {
+      try {
+        leafMap.setView([-6.369, 34.888], 6, { animate: false });
         leafMap.invalidateSize({ pan: false });
-        if (geoJsonLayer && typeof geoJsonLayer.getBounds === 'function' && geoJsonLayer.getBounds().isValid()) {
-          leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
-        } else {
-          leafMap.setView([-6.369, 34.888], 6);
+      } catch (err) {
+        // Silent catch
+      }
+      setTimeout(() => {
+        try {
+          leafMap.invalidateSize({ pan: false });
+          if (geoJsonLayer && typeof geoJsonLayer.getBounds === 'function' && geoJsonLayer.getBounds().isValid()) {
+            leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+          } else {
+            leafMap.setView([-6.369, 34.888], 6, { animate: false });
+          }
+        } catch (err) {
+          // Silent catch
         }
       }, 100);
     }
@@ -233,9 +242,13 @@ function initMapInteractions() {
       selectRegion(activeRegion, false);
 
       if (leafMap) {
-        leafMap.invalidateSize({ pan: false });
-        if (geoJsonLayer && typeof geoJsonLayer.getBounds === 'function' && geoJsonLayer.getBounds().isValid()) {
-          leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+        try {
+          leafMap.invalidateSize({ pan: false });
+          if (geoJsonLayer && typeof geoJsonLayer.getBounds === 'function' && geoJsonLayer.getBounds().isValid()) {
+            leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+          }
+        } catch (err) {
+          // Silent catch
         }
       }
     })
