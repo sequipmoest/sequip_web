@@ -744,4 +744,47 @@ const SEQUIP_DATA = {
   }
 };
 
-if (typeof module !== "undefined") { module.exports = SEQUIP_DATA; }
+const SEQUIP_ME_DATA = {
+  "Summary_Totals": [
+    { "Activity": "UJENZI WA SHULE MPYA (New Schools)", "Count": 798, "Amount_TZS": 463745731003 },
+    { "Activity": "UJENZI WA SHULE ZA WASICHANA (Girls' Schools)", "Count": 26, "Amount_TZS": 115840616663 },
+    { "Activity": "UJENZI WA SHULE ZA WAVULANA (Boys' Schools)", "Count": 7, "Amount_TZS": 28700000000 },
+    { "Activity": "NYUMBA (Houses)", "Count": 459, "Amount_TZS": 45711000000 },
+    { "Activity": "UKARABATI (Renovations)", "Count": 5, "Amount_TZS": 2215000000 },
+    { "Activity": "MABWENI (Dormitories)", "Count": 607, "Amount_TZS": 78034111500 },
+    { "Activity": "MADARASA (Classrooms)", "Count": 1484, "Amount_TZS": 26156000000 },
+    { "Activity": "VYOO (Toilets)", "Count": 4858, "Amount_TZS": 8115700000 },
+    { "Activity": "MAABARA (Laboratories)", "Count": 132, "Amount_TZS": 3960000000 }
+  ],
+  "New_Schools_By_Region": {
+    "TABORA": 48, "MOROGORO": 46, "TANGA": 44, "DODOMA": 39, "MTWARA": 38, "PWANI": 38,
+    "MARA": 37, "RUVUMA": 37, "MWANZA": 36, "KILIMANJARO": 34, "LINDI": 32, "KAGERA": 31,
+    "KIGOMA": 31, "SINGIDA": 31, "SIMIYU": 28, "IRINGA": 27, "ARUSHA": 26, "GEITA": 25,
+    "MBEYA": 24, "MANYARA": 24, "NJOMBE": 22, "SHINYANGA": 21, "SONGWE": 21,
+    "DAR ES SALAAM": 20, "RUKWA": 19, "KATAVI": 19
+  },
+  "Grand_Totals": {
+    "Total_Infrastructure_Units": 8376,
+    "Total_Investment_TZS": 772478159166
+  }
+};
+
+// Normalize and update regional school counts dynamically
+for (const regionKey in SEQUIP_ME_DATA.New_Schools_By_Region) {
+  const titleCaseName = regionKey.toLowerCase().split(' ').map(word => {
+    if (word === 'es') return 'es';
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+  
+  if (SEQUIP_DATA.regional[titleCaseName]) {
+    SEQUIP_DATA.regional[titleCaseName].schools = SEQUIP_ME_DATA.New_Schools_By_Region[regionKey];
+  }
+}
+
+// Attach M&E data to the main object
+SEQUIP_DATA.me = SEQUIP_ME_DATA;
+
+if (typeof module !== "undefined") { 
+  module.exports = { SEQUIP_DATA, SEQUIP_ME_DATA }; 
+}
+

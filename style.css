@@ -26,6 +26,12 @@
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --map-default: #1e293b;
   --map-stroke: #0f172a;
+  
+  /* Choropleth Density Levels - Dark Theme (Green/Teal Gradient) */
+  --choropleth-level-1: rgba(0, 230, 118, 0.15);
+  --choropleth-level-2: rgba(0, 230, 118, 0.35);
+  --choropleth-level-3: rgba(0, 230, 118, 0.65);
+  --choropleth-level-4: rgba(0, 230, 118, 0.95);
 }
 
 [data-theme="light"] {
@@ -49,6 +55,12 @@
   --shadow-lg: 0 12px 40px -8px rgba(0, 0, 0, 0.2);
   --map-default: #cbd5e1;
   --map-stroke: #f1f5f9;
+  
+  /* Choropleth Density Levels - Light Theme */
+  --choropleth-level-1: rgba(0, 168, 107, 0.15);
+  --choropleth-level-2: rgba(0, 168, 107, 0.35);
+  --choropleth-level-3: rgba(0, 168, 107, 0.65);
+  --choropleth-level-4: rgba(0, 168, 107, 0.95);
 }
 
 * {
@@ -761,15 +773,20 @@ body {
   transition: fill 0.3s ease, transform 0.2s ease, stroke-width 0.2s ease, filter 0.2s ease;
 }
 
+.map-region-path.choropleth-level-1 { fill: var(--choropleth-level-1); }
+.map-region-path.choropleth-level-2 { fill: var(--choropleth-level-2); }
+.map-region-path.choropleth-level-3 { fill: var(--choropleth-level-3); }
+.map-region-path.choropleth-level-4 { fill: var(--choropleth-level-4); }
+
 .map-region-path:hover {
-  fill: var(--accent-green);
+  fill: var(--accent-green) !important;
   filter: drop-shadow(0 0 8px var(--accent-green));
   stroke-width: 1.5px;
   stroke: #fff;
 }
 
 .map-region-path.active {
-  fill: var(--accent-gold);
+  fill: var(--accent-gold) !important;
   filter: drop-shadow(0 0 12px var(--accent-gold));
   stroke-width: 2px;
   stroke: #fff;
