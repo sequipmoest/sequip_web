@@ -1173,3 +1173,147 @@ body {
 .pbc-horizontal-bar-fill.warning {
   background: var(--accent-gold);
 }
+
+/* Leaflet GIS Custom Premium Styling */
+#gisMap {
+  background: transparent !important;
+}
+
+.leaflet-container {
+  font-family: var(--font-body) !important;
+  background: transparent !important;
+}
+
+/* Custom Zoom Control Styling */
+.leaflet-bar {
+  border: 1px solid var(--border-card) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.leaflet-bar a {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-card) !important;
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
+}
+
+.leaflet-bar a:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: var(--accent-green) !important;
+}
+
+.leaflet-bar a.leaflet-disabled {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-muted) !important;
+  opacity: 0.5;
+}
+
+/* Custom Popups Styling */
+.leaflet-popup-content-wrapper {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-card) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--shadow-lg) !important;
+  backdrop-filter: blur(10px);
+  padding: 4px;
+}
+
+.leaflet-popup-content {
+  font-family: var(--font-body) !important;
+  font-size: 0.75rem !important;
+  line-height: 1.4 !important;
+  margin: 10px 12px !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-card) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.leaflet-popup-close-button {
+  color: var(--text-secondary) !important;
+  padding: 8px !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: var(--accent-red) !important;
+}
+
+/* Tooltip Custom Styles */
+.map-tooltip h4 {
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--accent-green);
+  border-bottom: 1px solid var(--border-card);
+  padding-bottom: 4px;
+}
+
+.map-tooltip .tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.map-tooltip .tooltip-label {
+  color: var(--text-secondary);
+}
+
+.map-tooltip .tooltip-val {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Layer switcher styling */
+.layer-selector-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.layer-selector-btn.active:hover {
+  background-color: var(--accent-green) !important;
+}
+
+/* Custom Centroid Pulse Marker style */
+.girls-school-marker {
+  position: relative;
+}
+
+.girls-school-marker-inner {
+  width: 10px;
+  height: 10px;
+  background-color: var(--accent-green);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-green);
+}
+
+.girls-school-marker-pulse {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--accent-green);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: marker-pulse 1.8s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes marker-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
