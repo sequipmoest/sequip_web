@@ -129,8 +129,14 @@ function initLayoutSwitcher() {
     mapView.style.display = 'grid';
     heroView.style.display = 'none';
     
-    // Trigger map load adjustments if needed
+    // Trigger map load adjustments and invalidate size for Leaflet
     renderRegionDetails(activeRegion);
+    if (leafMap) {
+      setTimeout(() => {
+        leafMap.invalidateSize();
+        zoomToRegion(activeRegion);
+      }, 50);
+    }
   });
 }
 
@@ -216,7 +222,7 @@ function selectRegion(regionName, zoom = true) {
   // Highlight the matching region boundary on the map
   if (geoJsonLayer) {
     geoJsonLayer.eachLayer(layer => {
-      const isSelectedRegion = layer.feature.properties.region.toUpperCase() === regionName.toUpperCase();
+      const isSelectedRegion = normalizeRegionName(layer.feature.properties.region).toUpperCase() === normalizeRegionName(regionName).toUpperCase();
       if (isSelectedRegion) {
         layer.setStyle({
           weight: 3,
@@ -844,11 +850,11 @@ function renderMapLayers() {
   
   geoJsonLayer = L.geoJSON(regionsGeoJSON, {
     style: function(feature) {
-      const regionName = feature.properties.region;
+      const regionName = normalizeRegionName(feature.properties.region);
       const regData = SEQUIP_DATA.regional[regionName] || { schools: 0 };
       const count = regData.schools;
       
-      const isSelectedRegion = regionName.toUpperCase() === activeRegion.toUpperCase();
+      const isSelectedRegion = regionName.toUpperCase() === normalizeRegionName(activeRegion).toUpperCase();
       
       return {
         fillColor: activeMapLayer === 'choropleth' ? getChoroplethColor(count) : 'rgba(148, 163, 184, 0.04)',
@@ -1017,7 +1023,7 @@ function zoomToRegion(regionName) {
   let found = false;
   
   geoJsonLayer.eachLayer(layer => {
-    if (layer.feature.properties.region.toUpperCase() === regionName.toUpperCase()) {
+    if (normalizeRegionName(layer.feature.properties.region).toUpperCase() === normalizeRegionName(regionName).toUpperCase()) {
       bounds.extend(layer.getBounds());
       found = true;
     }
@@ -1031,11 +1037,12 @@ function zoomToRegion(regionName) {
 
 function normalizeRegionName(name) {
   if (!name) return "";
-  let normalized = name.trim();
+  let normalized = name.replace(/[-_]/g, " ").trim();
   normalized = normalized.toLowerCase().split(' ').map(word => {
     if (word === 'es') return 'es';
     return word.charAt(0).toUpperCase() + word.slice(1);
   }).join(' ');
+  if (normalized === "Dar Es Salaam") return "Dar es Salaam";
   return normalized;
 }
 
