@@ -138,9 +138,9 @@ function initLayoutSwitcher() {
     renderRegionDetails(activeRegion);
     
     if (leafMap) {
-      leafMap.invalidateSize();
+      leafMap.invalidateSize({ pan: false });
       setTimeout(() => {
-        leafMap.invalidateSize();
+        leafMap.invalidateSize({ pan: false });
         if (geoJsonLayer && typeof geoJsonLayer.getBounds === 'function' && geoJsonLayer.getBounds().isValid()) {
           leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
         } else {
@@ -233,7 +233,7 @@ function initMapInteractions() {
       selectRegion(activeRegion, false);
 
       if (leafMap) {
-        leafMap.invalidateSize();
+        leafMap.invalidateSize({ pan: false });
         if (geoJsonLayer && typeof geoJsonLayer.getBounds === 'function' && geoJsonLayer.getBounds().isValid()) {
           leafMap.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
         }
